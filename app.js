@@ -10,16 +10,16 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import httpContext from "express-http-context";
 
-import db from "../server/lib/sequelize.js";
-import upload from "../server/lib/multer.js";
-import authMiddleware from "../server/middlewares/auth.middleware.js";
-import passportJwtConfig from "../server/passport/jwt.passport.js";
-import router from "../server/core/index.js";
-import { errorResponse, formattedMsg } from "../server/utils/index.js";
-import { errorMsg } from "../server/utils/messages/message.js";
-import { frontend, database, server } from "../configs/env.js";
-import { setIp } from "../server/middlewares/ip.middleware.js";
-import { limiter } from "../configs/server.js";
+import db from "./server/lib/sequelize.js";
+import upload from "./server/lib/multer.js";
+import authMiddleware from "./server/middlewares/auth.middleware.js";
+import passportJwtConfig from "./server/passport/jwt.passport.js";
+import router from "./server/core/index.js";
+import { errorResponse, formattedMsg } from "./server/utils/index.js";
+import { errorMsg } from "./server/utils/messages/message.js";
+import { frontend, database, server } from "./configs/env.js";
+import { setIp } from "./server/middlewares/ip.middleware.js";
+import { limiter } from "./configs/server.js";
 
 const app = express();
 
