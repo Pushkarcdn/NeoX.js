@@ -3,7 +3,8 @@ import path from "path";
 import fs from "fs";
 
 const router = express.Router();
-const currentDir = path.resolve("");
+
+const routeDirectories = ["server/core", "src/modules"];
 
 let routes = [];
 
@@ -24,7 +25,10 @@ const getRouteFiles = (dir) => {
 };
 
 // Start collecting routes
-getRouteFiles(currentDir);
+routeDirectories.forEach((dir) => {
+  const fullPath = path.resolve(dir);
+  getRouteFiles(fullPath);
+});
 
 // Log all routes
 console.info("Routes Loaded: ", routes);
