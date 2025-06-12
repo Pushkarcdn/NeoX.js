@@ -43,4 +43,6 @@ async function loadRoutes() {
 // Initialize and export the router
 const routes = await loadRoutes();
 
-export { routes as default };
+// export { routes as default };
+
+export default router;
