@@ -1,5 +1,5 @@
 import rateLimit from "express-rate-limit";
-import db from "../api/lib/sequelize.js";
+import db from "../server/lib/sequelize.js";
 import { server } from "./env.js";
 
 export const models = db;

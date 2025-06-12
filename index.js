@@ -1,5 +1,5 @@
 // Import the Express app instance from the app.js file
-import app from "./api/app.js";
+import app from "./server/server.js";
 
 // Import the port configuration from the config file
 import { server } from "./configs/env.js";
