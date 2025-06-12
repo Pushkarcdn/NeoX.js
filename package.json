@@ -1,0 +1,89 @@
+{
+  "name": "neox.js",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.14.0",
+    "npm": ">=10.9.2"
+  },
+  "description": "Neox.js is a modern, fast, and secure JavaScript framework for building robust Node.js backend applications.",
+  "type": "module",
+  "main": "./index.js",
+  "exports": "./index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:local": "cross-env NODE_ENV=local nodemon index.js",
+    "dev:local:absolute": "cross-env NODE_ENV=local nodemon --loader esm-module-alias/loader --no-warnings index.js",
+    "dev:server": "cross-env NODE_ENV=development node index.js",
+    "dev:server:absolute": "cross-env NODE_ENV=development node --loader esm-module-alias/loader --no-warnings index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "start:absolute": "cross-env NODE_ENV=production node --loader esm-module-alias/loader --no-warnings index.js",
+    "migration:generate": "npx sequelize-cli migration:generate --name",
+    "migration:run": "npx sequelize-cli db:migrate",
+    "migration:revert": "npx sequelize-cli db:migrate:undo",
+    "seed:generate": "npx sequelize-cli seed:generate",
+    "seed:run": "npx sequelize-cli db:seed",
+    "seed:revert": "npx sequelize-cli db:seed:undo",
+    "lint": "eslint --fix . && echo 'Lint complete.'"
+  },
+  "keywords": [],
+  "author": "Pushkar Kumar Sah | www.pushkar.live",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pushkarcdn/neoX.js"
+  },
+  "bugs": {
+    "url": "https://github.com/Pushkarcdn/neoX.js/issues"
+  },
+  "homepage": "https://github.com/Pushkarcdn/neoX.js",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.6.1",
+    "cls-hooked": "^4.2.2",
+    "compression": "^1.8.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "esm-module-alias": "^2.2.1",
+    "express": "^5.1.0",
+    "express-http-context": "^1.2.5",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "fast-glob": "^3.3.3",
+    "glob": "^11.0.2",
+    "helmet": "^8.1.0",
+    "hpp": "^0.2.3",
+    "import-glob": "^1.5.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1",
+    "node-match-path": "^0.6.3",
+    "nodemailer": "^6.10.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.1",
+    "pg": "^8.16.0",
+    "sequelize": "^6.37.7",
+    "serverless-http": "^3.2.0",
+    "streamifier": "^0.1.1",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "globals": "^16.2.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "sequelize-cli": "^6.6.3"
+  },
+  "aliases": {
+    "@": "./"
+  }
+}
