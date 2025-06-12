@@ -1,48 +1,46 @@
 import express from "express";
 import path from "path";
-import { glob } from "glob";
+import fs from "fs";
 
 const router = express.Router();
+const currentDir = path.resolve("");
 
-// Use process.cwd() as recommended by Vercel
-const BASE_DIR = process.cwd();
-const ROUTES_DIR = path.join(BASE_DIR, "server/core");
+let routes = [];
 
-async function loadRoutes() {
+/**
+ * Recursively get all .route.js files from the given directory.
+ */
+const getRouteFiles = (dir) => {
+  const filesAndFolders = fs.readdirSync(dir);
+
+  filesAndFolders.forEach((entry) => {
+    const fullPath = path.join(dir, entry);
+    if (fs.statSync(fullPath).isDirectory()) {
+      getRouteFiles(fullPath); // Recursive call for nested folders
+    } else if (entry.endsWith(".route.js")) {
+      routes.push(fullPath);
+    }
+  });
+};
+
+// Start collecting routes
+getRouteFiles(currentDir);
+
+// Log all routes
+console.info("Routes Loaded: ", routes);
+
+// Import and attach routes
+(async () => {
   try {
-    // Find all route files using glob (more reliable than fs.readdir)
-    const routeFiles = await glob("**/*.route.js", {
-      cwd: ROUTES_DIR,
-      absolute: true,
-    });
-
-    console.info("Route Files: ", routeFiles);
-
-    // Import and register routes
-    await Promise.all(
-      routeFiles.map(async (filePath) => {
-        try {
-          // Use dynamic import with file:// protocol for Vercel compatibility
-          const module = await import(`file://${filePath}`);
-          router.use(module.default);
-          console.log(
-            `✅ Successfully loaded route: ${path.relative(ROUTES_DIR, filePath)}`
-          );
-        } catch (err) {
-          console.error(`❌ Failed to load route ${filePath}:`, err);
-        }
-      })
+    const modules = await Promise.all(
+      routes.map((filePath) => import(filePath))
     );
+    modules.forEach((module) => {
+      router.use(module.default);
+    });
   } catch (err) {
-    console.error("Error discovering routes:", err);
+    console.error("Error loading routes:", err);
   }
-
-  return router;
-}
-
-// Initialize and export the router
-const routes = await loadRoutes();
-
-// export { routes as default };
+})();
 
 export default router;
