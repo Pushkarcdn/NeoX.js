@@ -4,11 +4,11 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/api"
+      "dest": "api/vercel.js"
     }
   ],
   "functions": {
-    "api/**/*.js": {
+    "api/vercel.js": {
       "includeFiles": "**/*"
     }
   }
