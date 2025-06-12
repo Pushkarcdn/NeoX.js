@@ -10,8 +10,8 @@ const { admin } = models;
 let extractedToken = null;
 
 const extractToken = (req) => {
-  extractedToken = req?.cookies?.access_token || null;
-  return req?.cookies?.access_token || null;
+  extractedToken = req?.cookies?.accessToken || null;
+  return req?.cookies?.accessToken || null;
 };
 
 // Options for JWT strategy
@@ -36,7 +36,7 @@ const jwtPassportConfig = (passport) => {
         try {
           const { role, sub } = jwt_payload;
 
-          extractedToken = req.cookies.access_token;
+          extractedToken = req.cookies.accessToken;
 
           if (!extractedToken) return done(null, false);
 

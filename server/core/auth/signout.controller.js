@@ -4,14 +4,14 @@ import { invalidateAccessToken } from "../accessToken/accessToken.repository.js"
 
 const signOutUser = async (req, res, next) => {
   try {
-    const accessToken = req.cookies.access_token;
+    const accessToken = req.cookies.accessToken;
 
     if (!accessToken)
       throw new AuthException("No access token found", "signout");
 
     await invalidateAccessToken(accessToken);
 
-    res.clearCookie("access_token", {
+    res.clearCookie("accessToken", {
       httpOnly: true,
       secure: true,
       sameSite: "none",

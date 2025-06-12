@@ -35,6 +35,12 @@ const unprotectedRoutes = [
     route: "/api/signin/:userType",
   },
 
+  // current user
+  {
+    methods: ["GET"],
+    route: "/api/me",
+  },
+
   // email verification
   {
     methods: ["GET"],
@@ -149,13 +155,7 @@ const unprotectedRoutes = [
   },
 ];
 
-const commonProtectedRoutes = [
-  // current user
-  {
-    methods: ["GET"],
-    route: "/api/me",
-  },
-];
+const commonProtectedRoutes = [];
 
 const mentorRoutes = [
   ...commonProtectedRoutes,

@@ -1,6 +1,6 @@
 import { hashPassword } from "../../lib/bcrypt.js";
 import { successResponse } from "../../utils/index.js";
-import { AuthException } from "../../exceptions/index.js";
+import { AuthException, HttpException } from "../../exceptions/index.js";
 import { backend, frontend } from "../../../configs/env.js";
 import { signGeneralToken, verifyGeneralToken } from "../../lib/jwt.js";
 import sendEmailVerificationMail from "../../utils/mail/email-verification-mail.js";
@@ -22,7 +22,11 @@ const signupUser = async (req, res, next) => {
 
     const email = req.body.email;
 
-    const userRepository = models[`${userType}s`];
+    const userRepository = models[userType];
+
+    if (!userRepository) {
+      throw new HttpException(404, "User type not found", "auth");
+    }
 
     const existingUser = await userRepository.findOne({
       where: { email },

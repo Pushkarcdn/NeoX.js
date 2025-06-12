@@ -27,7 +27,11 @@ const signInUser = async (req, res, next) => {
 
     const { email } = req.body;
 
-    const userRepository = models[`${userType}s`];
+    const userRepository = models[userType];
+
+    if (!userRepository) {
+      throw new HttpException(404, "User type not found", "auth");
+    }
 
     const existingUser = await userRepository.findOne({
       where: { email },
@@ -80,7 +84,7 @@ const processLogin = async (req, res, next, user) => {
 
     await saveAccessToken(tokenPayload);
 
-    res.cookie("access_token", accessToken, {
+    res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",

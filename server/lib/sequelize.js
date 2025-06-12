@@ -16,9 +16,6 @@ const namespace = cls.createNamespace("transactional");
 
 Sequelize.useCLS(namespace);
 
-// const caCertPath = path.resolve(__dirname, "../ca.pem");
-// const caCert = fs.readFileSync(caCertPath).toString();
-
 // Initialize Sequelize with connection details
 const sequelize = new Sequelize(
   postgres.database,
@@ -85,12 +82,19 @@ const sequelize = new Sequelize(
 );
 
 // Load all model files and initialize models
-const models = sync(path.join(__dirname, "../../src/modules/**/*.model.js"));
+const moduleModels = sync(
+  path.join(__dirname, "../../src/modules/**/*.model.js")
+);
+const coreModels = sync(
+  path.join(__dirname, "../../server/core/**/*.model.js")
+);
+
+const allModels = [...moduleModels, ...coreModels];
 
 const db = {};
 
 const loadModels = async () => {
-  for (const modelFile of models) {
+  for (const modelFile of allModels) {
     try {
       // console.info(`Loading model ::::::  ${modelFile}`);
 
@@ -130,13 +134,6 @@ const loadModels = async () => {
 };
 
 await loadModels();
-
-// Setup model associations if available
-// Object.keys(db).forEach((modelName) => {
-//   if (typeof db[modelName].associate === "function") {
-//     db[modelName].associate(db);
-//   }
-// });
 
 // Export initialized Sequelize instance and models
 db.sequelize = sequelize;
