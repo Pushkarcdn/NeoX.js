@@ -10,7 +10,13 @@ export default (router) => {
       if (!module || !model) {
         throw new NotFoundException(`${model} not found!`, model);
       }
-      const data = await module?.findAll();
+      const data = await module?.findAll({
+        order: [
+          ["createdAt", "DESC"],
+          ["updatedAt", "DESC"],
+          ["id", "ASC"],
+        ],
+      });
       if (!data) {
         throw new NotFoundException(`${model} not found!`, model);
       }
