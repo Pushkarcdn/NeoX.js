@@ -4,7 +4,11 @@ export default [
     route: "/api/me",
   },
   {
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST"],
     route: "/api/faq",
+  },
+  {
+    methods: ["GET", "PUT", "DELETE"],
+    route: "/api/faq/:id",
   },
 ];

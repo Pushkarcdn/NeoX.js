@@ -10,11 +10,17 @@ export default (router) => {
       if (!module) {
         throw new NotFoundException(`${model} not found!`, model);
       }
+      const existingData = await module?.findByPk(id);
+      if (!existingData) {
+        throw new NotFoundException(`${model} not found!`, model);
+      }
       const data = await module?.destroy({ where: { id } });
       if (!data) {
         throw new NotFoundException(`Not deleted!`, model);
       }
-      successResponse(res, data, "delete", model);
+
+      console.log(data);
+      successResponse(res, `${model} deleted successfully!`, "delete", model);
     } catch (err) {
       next(err);
     }

@@ -6,7 +6,12 @@ export default (router) => {
   router.route("/:model").post(async (req, res, next) => {
     try {
       const { model } = req.params;
+
       const payload = req.body;
+      payload.createdBy = req?.user?.id || null;
+      payload.updatedBy = req?.user?.id || null;
+      payload.ip = req?.ip || null;
+
       const module = models[model];
       if (!module) {
         throw new NotFoundException(`${model} not found!`, model);
