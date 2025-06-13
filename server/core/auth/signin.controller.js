@@ -76,10 +76,9 @@ const processLogin = async (req, res, next, user) => {
     const accessToken = await signAccessToken(user);
 
     let tokenPayload = {
-      accessToken,
-      email: user?.email,
-      ip: req?.ip,
       userId: user?.user?.userId,
+      accessToken,
+      ip: req?.ip,
     };
 
     await saveAccessToken(tokenPayload);

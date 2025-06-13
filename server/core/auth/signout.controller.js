@@ -6,10 +6,9 @@ const signOutUser = async (req, res, next) => {
   try {
     const accessToken = req.cookies.accessToken;
 
-    if (!accessToken)
-      throw new AuthException("No access token found", "signout");
+    if (!accessToken) throw new AuthException("Signed out already!", "signout");
 
-    await invalidateAccessToken(accessToken);
+    invalidateAccessToken(accessToken);
 
     res.clearCookie("accessToken", {
       httpOnly: true,
@@ -19,7 +18,7 @@ const signOutUser = async (req, res, next) => {
 
     return successResponse(
       res,
-      "User signed out successfully",
+      "User signed out successfully!",
       "loggedOut",
       "auth.signout"
     );

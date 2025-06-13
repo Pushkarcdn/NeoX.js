@@ -1,11 +1,9 @@
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { jwtConfig } from "../../configs/env.js";
 import { getAccessToken } from "../core/accessToken/accessToken.repository.js";
-import { isUserAllowed } from "../../configs/permissions.js";
+import { isUserAllowed } from "../../configs/permission.js";
 
 import { models } from "../../configs/server.js";
-
-const { admin } = models;
 
 let extractedToken = null;
 
@@ -34,24 +32,15 @@ const jwtPassportConfig = (passport) => {
        */
       async (req, jwt_payload, done) => {
         try {
-          const { role, sub } = jwt_payload;
+          const { userType, sub } = jwt_payload;
 
           extractedToken = req.cookies.accessToken;
 
           if (!extractedToken) return done(null, false);
 
-          let user = null;
-
-          // Fetch user based on role
-          if (role === "buyer") {
-            // user = await getBuyerByUserId(sub);
-          } else if (role === "seller") {
-            // user = await getSellerByUserId(sub);
-          } else if (role === "admin" || role === "superAdmin") {
-            user = await admin.findOne({
-              where: { userId: sub },
-            });
-          }
+          const user = await models[userType]?.findOne({
+            where: { userId: sub },
+          });
 
           if (!user) return done(null, false);
 
@@ -68,7 +57,9 @@ const jwtPassportConfig = (passport) => {
           const route = req.originalUrl;
           const method = req.method;
 
-          if (!isUserAllowed(route, method, role)) return done(null, false);
+          const isAllowed = await isUserAllowed(route, method, userType);
+
+          if (!isAllowed) return done(null, false);
 
           // Remove sensitive information before returning
           delete user?.password;

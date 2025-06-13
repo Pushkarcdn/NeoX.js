@@ -1,11 +1,15 @@
+/* eslint-disable no-unreachable */
 import { hashPassword } from "../../lib/bcrypt.js";
 import { successResponse } from "../../utils/index.js";
-import { AuthException, HttpException } from "../../exceptions/index.js";
+import {
+  AuthException,
+  ConflictException,
+  HttpException,
+} from "../../exceptions/index.js";
 import { backend, frontend } from "../../../configs/env.js";
 import { signGeneralToken, verifyGeneralToken } from "../../lib/jwt.js";
 import sendEmailVerificationMail from "../../utils/mail/email-verification-mail.js";
 
-import UserRepository from "../../../src/modules/user/user.repository.js";
 import {
   saveToken,
   getToken,
@@ -20,13 +24,13 @@ const signupUser = async (req, res, next) => {
   try {
     const userType = req.params.userType;
 
-    const email = req.body.email;
-
     const userRepository = models[userType];
 
     if (!userRepository) {
       throw new HttpException(404, "User type not found", "auth");
     }
+
+    const email = req.body.email;
 
     const existingUser = await userRepository.findOne({
       where: { email },
@@ -38,9 +42,9 @@ const signupUser = async (req, res, next) => {
       ],
     });
 
-    if (existingUser) throw new AuthException("duplicateData", "user");
+    if (existingUser) throw new ConflictException("duplicateData", "user");
 
-    const newUserId = (await UserRepository.createUser(userType)).userId;
+    const newUserId = (await user.create({ userType })).userId;
 
     const userPayload = {
       ...req.body,
@@ -59,11 +63,9 @@ const signupUser = async (req, res, next) => {
 
 const resetSuperAdmin = async (req, res, next) => {
   try {
-    await UserRepository.deleteUserByFieldName({ userType: "admin" });
+    await user.destroy({ where: { userType: ["admin", "superAdmin"] } });
 
-    await UserRepository.deleteUserByFieldName({ userType: "superAdmin" });
-
-    const newUser = await UserRepository.createUser("superAdmin");
+    const newUser = await user.create({ userType: "superAdmin" });
 
     const superAdminPayload = {
       userId: newUser.userId,
@@ -151,7 +153,7 @@ const verifyEmail = async (req, res) => {
       return res.redirect(`${frontend.url}/email-verification/failed`);
 
     // find user
-    const user = await UserRepository.getByUserId(savedToken.userId);
+    const user = await user.findByPk(savedToken.userId);
 
     // pre set condition and update
     const condition = {

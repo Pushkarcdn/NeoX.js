@@ -24,7 +24,7 @@ const signAccessToken = (user) => {
   return new Promise((resolve, reject) => {
     const payload = {
       sub: user.user.userId,
-      role: user.user.userType,
+      userType: user.user.userType,
       email: user.email,
       iat: Date.now(),
     };
