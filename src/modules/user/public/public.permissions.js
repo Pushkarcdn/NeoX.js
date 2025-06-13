@@ -5,6 +5,10 @@ export default [
   },
   {
     methods: ["GET"],
+    route: "/api/test",
+  },
+  {
+    methods: ["GET"],
     route: "/api/reset-superadmin",
   },
   {

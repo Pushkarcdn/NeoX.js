@@ -39,8 +39,8 @@ console.info("Routes Loaded: ", routes);
     const modules = await Promise.all(
       routes.map((filePath) => import(filePath))
     );
-    modules.forEach((module) => {
-      router.use(module.default);
+    modules.forEach(async (module) => {
+      router.use(await module.default(router));
     });
   } catch (err) {
     console.error("Error loading routes:", err);
