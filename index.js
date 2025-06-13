@@ -5,9 +5,16 @@ import app from "./server/server.js";
 import { server } from "./configs/env.js";
 
 // Start the Express server on the specified port.
-app.listen(server.port, "0.0.0.0", () => {
+app.listen(server.port, "0.0.0.0", (err) => {
+  if (err) {
+    console.error(
+      `\nError starting the server on port ${server.port}:\n${err}\n`
+    );
+    return;
+  }
+
   console.info(`\n===========================================`);
   console.info(`======= Environment: ${process.env.NODE_ENV} ========`);
   console.info(`🚀 App listening on the port ${server.port}`);
-  console.info(`===========================================\n\n`);
+  console.info(`===========================================\n`);
 });

@@ -138,11 +138,11 @@ app.use((err, req, res, next) => {
       : message;
 
     console.error(
-      `\n\n[${method}] ${path} >> StatusCode: ${status}, Message: ${message}`
+      `\n[${method}] ${path} >> StatusCode: ${status}, Message: ${message}`
     );
 
     console.error(
-      `\n--------------------------------- \nStack: ${stack} \n------------------------------------------\n`
+      `${"-".repeat(100)} \nStack: ${stack} \n${"-".repeat(100)}\n`
     );
 
     errorObj = errorResponse(status, modifiedMessage, source);
