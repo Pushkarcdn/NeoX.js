@@ -37,10 +37,7 @@ const isUserAllowed = async (route, method, userType) => {
 
   if (!isMatch) {
     console.error(
-      route,
-      method,
-      userType,
-      "User is not authorized to access this resource."
+      `User is not authorized to access this resource. [userType: ${userType}] route: ${route} [${method}]`
     );
   }
   return isMatch;

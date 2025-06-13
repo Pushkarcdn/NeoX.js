@@ -1,5 +1,9 @@
 export default [
   {
+    methods: ["GET"],
+    route: "/api/me",
+  },
+  {
     methods: ["GET", "POST", "PUT", "DELETE"],
     route: "/api/inquiries",
   },
@@ -22,9 +26,5 @@ export default [
   {
     methods: ["GET", "POST", "PUT", "DELETE"],
     route: "/api/testimonials/:id",
-  },
-  {
-    methods: ["GET"],
-    route: "/api/me",
   },
 ];

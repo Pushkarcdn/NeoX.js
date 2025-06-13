@@ -5,7 +5,7 @@ export default [
   },
   {
     methods: ["GET"],
-    route: "/api/test",
+    route: "/favicon.ico",
   },
   {
     methods: ["GET"],

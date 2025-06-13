@@ -10,11 +10,11 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import httpContext from "express-http-context";
 
+import routes from "./core/index.js";
 import db from "./lib/sequelize.js";
 import upload from "./lib/multer.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import passportJwtConfig from "./passport/jwt.passport.js";
-import routes from "./core/index.js";
 import { errorResponse, formattedMsg } from "./utils/index.js";
 import { errorMsg } from "./utils/messages/message.js";
 import { setIp } from "./middlewares/ip.middleware.js";
