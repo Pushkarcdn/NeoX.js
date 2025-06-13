@@ -8,8 +8,13 @@ const { accessToken } = models;
 
 let extractedToken = null;
 
-const extractToken = (req) => {
-  return req?.cookies?.accessToken || null;
+export const extractToken = (req) => {
+  const extractedToken =
+    req?.cookies?.accessToken ||
+    req?.headers?.authorization?.split(" ")[1] ||
+    null;
+  console.log("extractedToken: ", extractedToken);
+  return extractedToken;
 };
 
 // Options for JWT strategy

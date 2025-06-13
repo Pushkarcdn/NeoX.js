@@ -13,7 +13,7 @@ app.listen(server.port, "0.0.0.0", (err) => {
     return;
   }
 
-  console.info(`\n===========================================`);
+  console.info(`===========================================`);
   console.info(`======= Environment: ${process.env.NODE_ENV} ========`);
   console.info(`🚀 App listening on the port ${server.port}`);
   console.info(`===========================================\n`);

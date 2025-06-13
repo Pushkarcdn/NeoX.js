@@ -2,12 +2,13 @@ import { AuthException } from "../../exceptions/index.js";
 import { successResponse } from "../../utils/index.js";
 
 import { models } from "../../../configs/server.js";
+import { extractToken } from "../../passport/jwt.passport.js";
 
 const { accessToken } = models;
 
 const signOutUser = async (req, res, next) => {
   try {
-    const accessTokenFromCookie = req.cookies.accessToken;
+    const accessTokenFromCookie = extractToken(req);
 
     if (!accessTokenFromCookie)
       throw new AuthException("Signed out already!", "signout");

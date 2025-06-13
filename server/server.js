@@ -18,6 +18,7 @@ import passportJwtConfig from "./passport/jwt.passport.js";
 import { errorResponse, formattedMsg } from "./utils/index.js";
 import { errorMsg } from "./utils/messages/message.js";
 import { setIp } from "./middlewares/ip.middleware.js";
+import { setupSwagger } from "./lib/swagger.js";
 import { frontend, database, server } from "../configs/env.js";
 import { limiter } from "../configs/server.js";
 
@@ -100,6 +101,8 @@ app.get("/", (req, res, next) => {
 
 //Initialize Application Routes
 app.use("/api", limiter, await routes(router));
+
+setupSwagger(app);
 
 /**
  * 404 Error Handler

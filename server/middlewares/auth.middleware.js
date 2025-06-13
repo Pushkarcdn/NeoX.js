@@ -18,7 +18,7 @@ const authMiddleware = (req, res, next) => {
         try {
           if (!user || err) {
             // console.error(
-            //   "JWT Auth failed:",
+            //   "\nJWT Auth failed:",
             //   info?.message || "Unknown reason\n",
             //   err
             // );

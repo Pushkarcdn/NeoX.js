@@ -9,6 +9,18 @@ export default [
   },
   {
     methods: ["GET"],
+    route: "/api-docs",
+  },
+  {
+    methods: ["GET"],
+    route: "/api-docs/*",
+  },
+  {
+    methods: ["GET"],
+    route: "/api-docs.json",
+  },
+  {
+    methods: ["GET"],
     route: "/api/reset-superadmin",
   },
   {

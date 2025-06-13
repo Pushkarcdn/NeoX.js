@@ -90,7 +90,7 @@ const processLogin = async (req, res, next, user) => {
 
     return successResponse(
       res,
-      "Successfully logged in!",
+      { accessToken: newAccessToken },
       "loggedIn",
       userType
     );
