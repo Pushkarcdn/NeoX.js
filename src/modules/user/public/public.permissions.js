@@ -23,8 +23,4 @@ export default [
     methods: ["GET"],
     route: "/api/signout",
   },
-  {
-    methods: ["GET"],
-    route: "/api/me",
-  },
 ];

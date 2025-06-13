@@ -34,6 +34,10 @@ app.use(compression()); // Enable response compression for faster API responses
 app.use(cookieParser()); // Parse cookies from HTTP requests
 app.use(httpContext.middleware); // Attach request-scoped data (context)
 app.use(setIp); // Set the IP address of the request origin in the request
+
+// Initialize Passport
+passportJwtConfig(passport);
+
 app.use(authMiddleware); // Global authentication middleware
 
 app.use(upload);
@@ -67,9 +71,6 @@ if (
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use(express.static(join(__dirname, "../public"))); // Serve static frontend files
-
-// Initialize Passport
-passportJwtConfig(passport);
 
 /**
  * Connect to the SQL Database using Sequelize

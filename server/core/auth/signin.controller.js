@@ -1,11 +1,10 @@
 import { AuthException, HttpException } from "../../exceptions/index.js";
 import { successResponse } from "../../utils/index.js";
 import { signAccessToken } from "../../lib/jwt.js";
-import { saveAccessToken } from "../accessToken/accessToken.repository.js";
 import { verifyHashedPassword } from "../../lib/bcrypt.js";
 import { models } from "../../../configs/server.js";
 
-const { user } = models;
+const { user, accessToken } = models;
 
 const currentUser = async (req, res, next) => {
   try {
@@ -73,17 +72,17 @@ const processLogin = async (req, res, next, user) => {
 
     if (!isMatch) throw new AuthException("invalidCredential", "");
 
-    const accessToken = await signAccessToken(user);
+    const newAccessToken = await signAccessToken(user);
 
     let tokenPayload = {
       userId: user?.user?.userId,
-      accessToken,
+      accessToken: newAccessToken,
       ip: req?.ip,
     };
 
-    await saveAccessToken(tokenPayload);
+    await accessToken.create(tokenPayload);
 
-    res.cookie("accessToken", accessToken, {
+    res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",

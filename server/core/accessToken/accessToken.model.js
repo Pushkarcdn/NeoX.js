@@ -20,10 +20,6 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
-    ip: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
   });
 
   AccessToken.associate = (models) => {

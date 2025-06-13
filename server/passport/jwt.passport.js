@@ -1,14 +1,14 @@
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { jwtConfig } from "../../configs/env.js";
-import { getAccessToken } from "../core/accessToken/accessToken.repository.js";
 import { isUserAllowed } from "../../configs/permission.js";
 
 import { models } from "../../configs/server.js";
 
+const { accessToken } = models;
+
 let extractedToken = null;
 
 const extractToken = (req) => {
-  extractedToken = req?.cookies?.accessToken || null;
   return req?.cookies?.accessToken || null;
 };
 
@@ -34,7 +34,7 @@ const jwtPassportConfig = (passport) => {
         try {
           const { userType, sub } = jwt_payload;
 
-          extractedToken = req.cookies.accessToken;
+          extractedToken = extractToken(req);
 
           if (!extractedToken) return done(null, false);
 
@@ -45,12 +45,16 @@ const jwtPassportConfig = (passport) => {
           if (!user) return done(null, false);
 
           // Fetch the access token information
-          const accessTokenRecord = await getAccessToken(extractedToken);
+          const accessTokenRecord = await accessToken.findOne({
+            where: {
+              accessToken: extractedToken,
+            },
+          });
 
           if (!accessTokenRecord) return done(null, false);
 
           // Check if the access token is valid
-          const { isActive } = accessTokenRecord.dataValues;
+          const { isActive } = accessTokenRecord;
           if (!isActive) return done(null, false);
 
           // Check if the user is allowed to access the resource
@@ -65,10 +69,10 @@ const jwtPassportConfig = (passport) => {
           delete user?.password;
 
           // Return authenticated user
-          return done(null, user.dataValues);
+          return done(null, user);
         } catch (err) {
           // In case of error, pass it to done()
-          console.error("errorrrrrr in jwt.passport.js");
+          console.error("Error in jwt.passport.js: ", err);
           return done(err, false);
         }
       }

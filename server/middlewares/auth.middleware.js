@@ -1,6 +1,7 @@
 import passport from "passport";
 import { match } from "node-match-path";
 import publicPermission from "../../src/modules/user/public/public.permissions.js";
+import { AuthException } from "../exceptions/index.js";
 
 const authMiddleware = (req, res, next) => {
   try {
@@ -13,9 +14,24 @@ const authMiddleware = (req, res, next) => {
     if (isPublicRoute) {
       next();
     } else {
-      passport.authenticate("jwt", { session: false })(req, res, async () => {
-        next();
-      });
+      passport.authenticate("jwt", { session: false }, (err, user, info) => {
+        try {
+          if (!user || err) {
+            // console.error(
+            //   "JWT Auth failed:",
+            //   info?.message || "Unknown reason\n",
+            //   err
+            // );
+
+            throw new AuthException("unauthorized", "auth");
+          } else {
+            req.user = user;
+            next();
+          }
+        } catch (error) {
+          next(error);
+        }
+      })(req, res, next);
     }
   } catch (err) {
     next(err);

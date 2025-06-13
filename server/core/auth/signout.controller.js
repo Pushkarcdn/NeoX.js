@@ -1,14 +1,27 @@
 import { AuthException } from "../../exceptions/index.js";
 import { successResponse } from "../../utils/index.js";
-import { invalidateAccessToken } from "../accessToken/accessToken.repository.js";
+
+import { models } from "../../../configs/server.js";
+
+const { accessToken } = models;
 
 const signOutUser = async (req, res, next) => {
   try {
-    const accessToken = req.cookies.accessToken;
+    const accessTokenFromCookie = req.cookies.accessToken;
 
-    if (!accessToken) throw new AuthException("Signed out already!", "signout");
+    if (!accessTokenFromCookie)
+      throw new AuthException("Signed out already!", "signout");
 
-    invalidateAccessToken(accessToken);
+    await accessToken.update(
+      {
+        isActive: false,
+      },
+      {
+        where: {
+          accessToken: accessTokenFromCookie,
+        },
+      }
+    );
 
     res.clearCookie("accessToken", {
       httpOnly: true,

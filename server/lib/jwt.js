@@ -25,7 +25,6 @@ const signAccessToken = (user) => {
     const payload = {
       sub: user.user.userId,
       userType: user.user.userType,
-      email: user.email,
       iat: Date.now(),
     };
 
