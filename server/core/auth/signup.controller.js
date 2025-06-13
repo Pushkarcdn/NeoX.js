@@ -1,4 +1,3 @@
-/* eslint-disable no-unreachable */
 import { hashPassword } from "../../lib/bcrypt.js";
 import { successResponse } from "../../utils/index.js";
 import {
@@ -10,15 +9,9 @@ import { backend, frontend } from "../../../configs/env.js";
 import { signGeneralToken, verifyGeneralToken } from "../../lib/jwt.js";
 import sendEmailVerificationMail from "../../utils/mail/email-verification-mail.js";
 
-import {
-  saveToken,
-  getToken,
-  invalidateToken,
-} from "../token/token.repository.js";
-
 import { models } from "../../../configs/server.js";
 
-const { user, admin } = models;
+const { user, admin, token } = models;
 
 const signupUser = async (req, res, next) => {
   try {
@@ -126,7 +119,8 @@ const initiateEmailVerification = async (user, ip) => {
       type: "emailVerification",
       ip: ip,
     };
-    await saveToken(tokenPayload);
+
+    await token.create(tokenPayload);
 
     // send mail
     const mailData = {
@@ -148,9 +142,16 @@ const verifyEmail = async (req, res) => {
     if (!tokenData)
       return res.redirect(`${frontend.url}/email-verification/failed`);
 
-    const savedToken = await getToken(token);
-    if (!savedToken || savedToken?.type !== "emailVerification")
+    const savedToken = await token.findOne({
+      where: {
+        token,
+        type: "emailVerification",
+      },
+    });
+
+    if (!savedToken) {
       return res.redirect(`${frontend.url}/email-verification/failed`);
+    }
 
     // find user
     const user = await user.findByPk(savedToken.userId);
@@ -176,7 +177,7 @@ const verifyEmail = async (req, res) => {
         throw new AuthException("invalidToken", "email verification");
     }
 
-    await invalidateToken(token);
+    // await invalidateToken(token);
 
     return res.redirect(url);
   } catch (error) {

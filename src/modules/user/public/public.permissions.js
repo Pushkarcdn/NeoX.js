@@ -4,6 +4,10 @@ export default [
     route: "/",
   },
   {
+    methods: ["GET"],
+    route: "/api/reset-superadmin",
+  },
+  {
     methods: ["POST"],
     route: "/api/signup/:userType",
   },
@@ -14,5 +18,9 @@ export default [
   {
     methods: ["GET"],
     route: "/api/signout",
+  },
+  {
+    methods: ["GET"],
+    route: "/api/me",
   },
 ];
