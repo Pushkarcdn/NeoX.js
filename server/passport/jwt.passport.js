@@ -13,7 +13,6 @@ export const extractToken = (req) => {
     req?.cookies?.accessToken ||
     req?.headers?.authorization?.split(" ")[1] ||
     null;
-  console.log("extractedToken: ", extractedToken);
   return extractedToken;
 };
 

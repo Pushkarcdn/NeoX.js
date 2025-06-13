@@ -1,13 +1,6 @@
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { models } from "../../configs/server.js";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-// Get directory name in ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 /**
  * Dynamically generate Swagger documentation for all routes
@@ -264,16 +257,6 @@ export const setupSwagger = (app) => {
   const routeDirectories = ["server/core", "src/modules"];
   const customPaths = {};
 
-  // Scan for route files and include them in Swagger docs
-  const rootDir = path.resolve(__dirname, "../../");
-  routeDirectories.forEach((dir) => {
-    const fullPath = path.join(rootDir, dir);
-
-    if (fs.existsSync(fullPath)) {
-      findRouteFiles(fullPath, customPaths);
-    }
-  });
-
   // Define Swagger options
   const swaggerOptions = {
     definition: {
@@ -305,11 +288,7 @@ export const setupSwagger = (app) => {
       },
       paths: { ...modelPaths, ...customPaths },
     },
-    apis: [
-      // Include route files for JSDoc comments parsing
-      path.join(rootDir, "server/core/**/*.route.js"),
-      path.join(rootDir, "src/modules/**/*.route.js"),
-    ],
+    apis: [], // We're generating paths dynamically instead
     security: [{ bearerAuth: [] }],
   };
 
@@ -452,7 +431,7 @@ export const setupSwagger = (app) => {
         responseInterceptor: (res) => {
           // Log if there were issues with the request
           if (res.status >= 400) {
-            console.error("API request failed: ", res.url, res.status);
+            console.info("API request failed:", res.url, res.status);
           }
           return res;
         },
@@ -525,50 +504,5 @@ function getExampleForType(type) {
       return [];
     default:
       return "example";
-  }
-}
-
-/**
- * Recursively find route files in directories
- * @param {string} dir - Directory to scan
- * @param {object} customPaths - Object to collect route paths
- */
-function findRouteFiles(dir, customPaths) {
-  try {
-    const files = fs.readdirSync(dir);
-
-    files.forEach((file) => {
-      const filePath = path.join(dir, file);
-      const stat = fs.statSync(filePath);
-
-      if (stat.isDirectory()) {
-        // Recursively search subdirectories
-        findRouteFiles(filePath, customPaths);
-      } else if (file.endsWith(".route.js")) {
-        // console.info(`[Swagger]: Found route file: ${filePath}`);
-        // This will print the route file path but won't actually parse it.
-        // The actual parsing will be done by swagger-jsdoc when we include
-        // the file patterns in the 'apis' array of swaggerOptions.
-        //
-        // To use this feature, you need to add JSDoc comments to your route files like this:
-        //
-        // /**
-        //  * @swagger
-        //  * /users/profile:
-        //  *   get:
-        //  *     tags:
-        //  *       - Users
-        //  *     summary: Get user profile
-        //  *     security:
-        //  *       - bearerAuth: []
-        //  *     responses:
-        //  *       200:
-        //  *         description: User profile data
-        //  */
-        // router.get('/profile', userController.getProfile);
-      }
-    });
-  } catch (error) {
-    console.error(`Error scanning directory ${dir}:`, error);
   }
 }
