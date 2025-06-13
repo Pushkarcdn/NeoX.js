@@ -19,18 +19,18 @@ const currentUser = async (req, res, next) => {
   }
 };
 
-// signin user
 const signInUser = async (req, res, next) => {
   try {
     const userType = req.params.userType;
 
     const { email } = req.body;
 
-    const userRepository = models[userType];
-
-    if (!userRepository) {
-      throw new HttpException(404, "User type not found", "auth");
+    // Check if the model exists first
+    if (!models[userType]) {
+      throw new HttpException(404, `User type '${userType}' not found`, "auth");
     }
+
+    const userRepository = models[userType];
 
     const existingUser = await userRepository.findOne({
       where: { email },
@@ -88,7 +88,12 @@ const processLogin = async (req, res, next, user) => {
       sameSite: "none",
     });
 
-    return successResponse(res, "Successfully Logged in", "loggedIn", userType);
+    return successResponse(
+      res,
+      "Successfully logged in!",
+      "loggedIn",
+      userType
+    );
   } catch (error) {
     next(error);
   }

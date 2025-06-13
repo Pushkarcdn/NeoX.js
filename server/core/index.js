@@ -34,12 +34,20 @@ export default async (router) => {
   // Import and attach routes
   await (async () => {
     try {
-      const modules = await Promise.all(
-        routes.map((filePath) => import(filePath))
+      await Promise.all(
+        routes.map(async (filePath) => {
+          try {
+            const module = await import(filePath);
+            if (typeof module.default === "function") {
+              module.default(router);
+            } else {
+              console.error(`\nError loading route: ${filePath}`);
+            }
+          } catch (error) {
+            console.error(`\nError loading route: ${filePath}`, error);
+          }
+        })
       );
-      modules.forEach(async (module) => {
-        router.use(await module.default(router));
-      });
     } catch (err) {
       console.error("Error loading routes:", err);
     }

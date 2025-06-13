@@ -22,6 +22,4 @@ export default (router) => {
 
   // email verification endpoint
   router.route("/verify-email/:token").get(SignupController.verifyEmail);
-
-  return router;
 };
