@@ -3,19 +3,14 @@ import SignupController from "./signup.controller.js";
 import SignOutController from "./signout.controller.js";
 
 export default (router) => {
-  // test
-  router.route("/test").get((req, res) => {
-    res.send("Hello World");
-  });
+  // current user
+  router.route("/me").get(SigninController.currentUser);
 
   // signup user
   router.route("/signup/:userType").post(SignupController.signupUser);
 
   // sign in user
   router.route("/signin/:userType").post(SigninController.signInUser);
-
-  // current user
-  router.route("/me").get(SigninController.currentUser);
 
   // sign out
   router.route("/signout").get(SignOutController.signOutUser);

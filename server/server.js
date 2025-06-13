@@ -88,7 +88,7 @@ await db.sequelize
   })
   .catch((err) => console.error(err.stack));
 
-// Home GET route for testing
+// Home GET route
 app.get("/", (req, res, next) => {
   try {
     res.send({
