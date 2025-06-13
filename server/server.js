@@ -14,7 +14,7 @@ import db from "./lib/sequelize.js";
 import upload from "./lib/multer.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import passportJwtConfig from "./passport/jwt.passport.js";
-import router from "./core/index.js";
+import routes from "./core/index.js";
 import { errorResponse, formattedMsg } from "./utils/index.js";
 import { errorMsg } from "./utils/messages/message.js";
 import { setIp } from "./middlewares/ip.middleware.js";
@@ -22,6 +22,7 @@ import { frontend, database, server } from "../configs/env.js";
 import { limiter } from "../configs/server.js";
 
 const app = express();
+const router = express.Router();
 
 app.set("trust proxy", server.noOfProxies); // Trusting the Proxy (Cloudflare or Load Balancer)
 app.set("view engine", "ejs"); // EJS as templating engine for rendering views
@@ -103,7 +104,7 @@ app.get("/", (req, res, next) => {
 });
 
 //Initialize Application Routes
-app.use("/api", limiter, router);
+app.use("/api", limiter, routes(router));
 
 /**
  * 404 Error Handler
