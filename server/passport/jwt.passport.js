@@ -53,14 +53,11 @@ const jwtPassportConfig = (passport) => {
           const accessTokenRecord = await accessToken.findOne({
             where: {
               accessToken: extractedToken,
+              isActive: true,
             },
           });
 
           if (!accessTokenRecord) return done(null, false);
-
-          // Check if the access token is valid
-          const { isActive } = accessTokenRecord;
-          if (!isActive) return done(null, false);
 
           // Check if the user is allowed to access the resource
           const route = req.originalUrl;
