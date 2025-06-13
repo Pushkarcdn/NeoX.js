@@ -42,9 +42,6 @@ app.use(authMiddleware); // Global authentication middleware
 
 app.use(upload);
 
-/**
- * Middleware for Different Environments
- */
 if (
   process.env.NODE_ENV === "local" ||
   process.env.NODE_ENV === "development"
@@ -72,9 +69,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use(express.static(join(__dirname, "../public"))); // Serve static frontend files
 
-/**
- * Connect to the SQL Database using Sequelize
- */
 await db.sequelize
   .authenticate()
   .then(() => {

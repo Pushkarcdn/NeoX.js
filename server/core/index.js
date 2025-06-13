@@ -6,9 +6,6 @@ export default async (router) => {
 
   let routes = [];
 
-  /**
-   * Recursively get all .route.js files from the given directory.
-   */
   const getRouteFiles = (dir) => {
     const filesAndFolders = fs.readdirSync(dir);
 

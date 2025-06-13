@@ -3,11 +3,6 @@ import ejs from "ejs";
 import { mailerConfig } from "../../../configs/env.js";
 import path from "path";
 
-/**
- * Sends an email using the configured template engine.
- * @param {Object} data - The email data, including receiver, subject, template file, and context.
- * @returns {Promise<string>} A promise that resolves with a success message or rejects with an error.
- */
 const nodeMailer = (data) => {
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport(mailerConfig);
@@ -16,15 +11,15 @@ const nodeMailer = (data) => {
     try {
       if (templateEngine === "handlebars") {
         // Handlebars setup
-        // const handlebarOptions = {
-        //   viewEngine: {
-        //     partialsDir: path.resolve("./views/"),
-        //     defaultLayout: false,
-        //   },
-        //   viewPath: path.resolve("./views/"),
-        // };
-        // transporter.use("compile", hbs(handlebarOptions));
-        // console.info("Handlebars template engine configured.");
+        const handlebarOptions = {
+          viewEngine: {
+            partialsDir: path.resolve("./views/"),
+            defaultLayout: false,
+          },
+          viewPath: path.resolve("./views/"),
+        };
+        transporter.use("compile", handlebarOptions);
+        console.info("Handlebars template engine configured.");
       } else if (templateEngine === "ejs") {
         // EJS setup
         transporter.use("compile", (mail, callback) => {

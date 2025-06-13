@@ -1,13 +1,3 @@
-/**
- * Represents a standardized success response.
- *
- * @property {boolean} success - Indicates if the response is successful.
- * @property {number} status - HTTP status code of the response.
- * @property {array|object} data - The main data of the response.
- * @property {string} message - Response message for client readability.
- * @property {string} source - Source of the response (e.g., "Product", "User").
- * @property {object|null} pagination - Pagination information if applicable.
- */
 class SuccessResponse {
   constructor() {
     this.success = true;
