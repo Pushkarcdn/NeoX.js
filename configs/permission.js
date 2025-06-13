@@ -1,6 +1,13 @@
 import fs from "fs";
 import path from "path";
 
+const commonProtectedRoutes = [
+  {
+    methods: ["GET"],
+    route: "/api/me",
+  },
+];
+
 const isUserAllowed = async (route, method, userType) => {
   if (userType === "superAdmin") return true;
 
@@ -14,6 +21,8 @@ const isUserAllowed = async (route, method, userType) => {
   }
 
   const allowedRoutes = (await import(permissionsPath))?.default;
+
+  allowedRoutes.push(...commonProtectedRoutes);
 
   if (!allowedRoutes) return false;
 
