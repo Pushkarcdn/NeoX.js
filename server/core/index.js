@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 
-export default (router) => {
+export default async (router) => {
   const routeDirectories = ["server/core", "src/modules"];
 
   let routes = [];
@@ -32,7 +32,7 @@ export default (router) => {
   console.info("Routes detected: ", routes);
 
   // Import and attach routes
-  (async () => {
+  await (async () => {
     try {
       const modules = await Promise.all(
         routes.map((filePath) => import(filePath))

@@ -104,7 +104,7 @@ app.get("/", (req, res, next) => {
 });
 
 //Initialize Application Routes
-app.use("/api", limiter, routes(router));
+app.use("/api", limiter, await routes(router));
 
 /**
  * 404 Error Handler
