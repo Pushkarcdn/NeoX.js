@@ -6,19 +6,25 @@ import { models } from "../../configs/server.js";
 
 const { accessToken } = models;
 
-let extractedToken = null;
+let extractedAccessToken = null;
 
-export const extractToken = (req) => {
-  const extractedToken =
+export const extractAccessToken = (req) => {
+  const extractedAccessToken =
     req?.cookies?.accessToken ||
     req?.headers?.authorization?.split(" ")[1] ||
     null;
-  return extractedToken;
+  return extractedAccessToken;
+};
+
+export const extractRefreshToken = (req) => {
+  const extractedRefreshToken =
+    req?.cookies?.refreshToken || req?.body?.refreshToken || null;
+  return extractedRefreshToken;
 };
 
 // Options for JWT strategy
 const opts = {
-  jwtFromRequest: ExtractJwt.fromExtractors([extractToken]),
+  jwtFromRequest: ExtractJwt.fromExtractors([extractAccessToken]),
   secretOrKey: jwtConfig.accessTokenSecret,
   algorithms: ["HS256"],
   passReqToCallback: true, // Enables req access in callback
@@ -38,12 +44,18 @@ const jwtPassportConfig = (passport) => {
         try {
           const { userType, sub } = jwt_payload;
 
-          extractedToken = extractToken(req);
+          extractedAccessToken = extractAccessToken(req);
 
-          if (!extractedToken) return done(null, false);
+          if (!extractedAccessToken) return done(null, false);
 
           const user = await models[userType]?.findOne({
             where: { userId: sub },
+            include: [
+              {
+                model: models.user,
+                as: "user",
+              },
+            ],
           });
 
           if (!user) return done(null, false);
@@ -51,7 +63,7 @@ const jwtPassportConfig = (passport) => {
           // Fetch the access token information
           const accessTokenRecord = await accessToken.findOne({
             where: {
-              accessToken: extractedToken,
+              accessToken: extractedAccessToken,
               isActive: true,
             },
           });

@@ -1,11 +1,12 @@
 import jwt from "jsonwebtoken";
 import { jwtConfig } from "../../configs/env.js";
+import { AuthException } from "../exceptions/index.js";
 
 const signAccessToken = (user) => {
   return new Promise((resolve, reject) => {
     const payload = {
-      sub: user.user.userId,
-      userType: user.user.userType,
+      sub: user.userId,
+      userType: user.userType,
       iat: Date.now(),
     };
 
@@ -17,7 +18,7 @@ const signAccessToken = (user) => {
       { expiresIn, algorithm: "HS256" },
       (err, token) => {
         if (err) {
-          console.error("Error signing access token:", err.message);
+          console.error("Error signing access token: ", err.message);
           reject(new Error("Failed to sign access token"));
           return;
         }
@@ -31,9 +32,11 @@ const signRefreshToken = (user) => {
   return new Promise((resolve, reject) => {
     const payload = {
       sub: user.userId,
+      userType: user.userType,
       iat: Date.now(),
     };
-    const expiresIn = jwtConfig.refreshTokenExpiresIn || "2h";
+
+    const expiresIn = jwtConfig.refreshTokenExpiresIn;
 
     jwt.sign(
       payload,
@@ -41,7 +44,7 @@ const signRefreshToken = (user) => {
       { expiresIn, algorithm: "HS256" },
       (err, token) => {
         if (err) {
-          console.error("Error signing refresh token:", err.message);
+          console.error("Error signing refresh token: ", err.message);
           reject(new Error("Failed to sign refresh token"));
           return;
         }
@@ -61,8 +64,8 @@ const signGeneralToken = (payload) => {
       { expiresIn, algorithm: "HS256" },
       (err, token) => {
         if (err) {
-          console.error("Error signing access token:", err.message);
-          reject(new Error("Failed to sign access token"));
+          console.error("Error signing general token: ", err.message);
+          reject(new Error("Failed to sign general token"));
           return;
         }
         resolve(token);
@@ -75,35 +78,24 @@ const verifyRefreshToken = (refreshToken) => {
   return new Promise((resolve, reject) => {
     jwt.verify(refreshToken, jwtConfig.refreshTokenSecret, (err, payload) => {
       if (err) {
-        reject(new Error("Invalid refresh token"));
+        console.error("Error verifying refresh token: ", err.message);
+        reject(new AuthException("invalidRefreshToken", "auth"));
         return;
       }
-      const userId = payload.sub;
-      // UserData.findOneByField({ userId })
-      //   .then((userInfo) => {
-      //     if (!userInfo) {
-      //       reject(new Error("User not found"));
-      //     } else {
-      //       resolve(userInfo);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error fetching user data:", error.message);
-      //     reject(new Error("Failed to retrieve user information"));
-      //   });
+      resolve(payload);
     });
   });
 };
 
 const verifyGeneralToken = (token) => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, jwtConfig.generalTokenSecret, (err, decoded) => {
+    jwt.verify(token, jwtConfig.generalTokenSecret, (err, payload) => {
       if (err) {
-        console.error("Token validation failed:", err.message);
-        reject(new Error("Invalid or expired token"));
+        console.error("Token validation failed: ", err.message);
+        reject(new AuthException("invalidToken", "auth"));
         return;
       }
-      resolve(decoded); // Returns decoded payload if valid
+      resolve(payload);
     });
   });
 };

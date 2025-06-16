@@ -7,4 +7,8 @@ export default [
     methods: ["GET", "PUT", "DELETE"],
     route: "/api/faq/:id",
   },
+  {
+    methods: ["GET"],
+    route: "/api/refresh",
+  },
 ];

@@ -12,6 +12,9 @@ export default (router) => {
   // sign in user
   router.route("/signin/:userType").post(SigninController.signInUser);
 
+  // refresh token
+  router.route("/refresh").get(SigninController.refreshUserToken);
+
   // sign out
   router.route("/signout").get(SignOutController.signOutUser);
 

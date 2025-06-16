@@ -16,9 +16,10 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING(512),
       allowNull: false,
     },
-    isActive: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
+    timesUsed: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
     },
   });
 

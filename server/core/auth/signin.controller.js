@@ -1,10 +1,15 @@
 import { AuthException, HttpException } from "../../exceptions/index.js";
 import { successResponse } from "../../utils/index.js";
-import { signAccessToken } from "../../lib/jwt.js";
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+} from "../../lib/jwt.js";
 import { verifyHashedPassword } from "../../lib/bcrypt.js";
 import { models } from "../../../configs/server.js";
+import { extractRefreshToken } from "../../passport/jwt.passport.js";
 
-const { user, accessToken } = models;
+const { user, accessToken, refreshToken } = models;
 
 const currentUser = async (req, res, next) => {
   try {
@@ -44,13 +49,13 @@ const signInUser = async (req, res, next) => {
 
     if (!existingUser) throw new AuthException("invalidCredential", userType);
 
-    processLogin(req, res, next, existingUser);
+    processAuth(req, res, next, existingUser);
   } catch (error) {
     next(error);
   }
 };
 
-const processLogin = async (req, res, next, user) => {
+const processAuth = async (req, res, next, user) => {
   try {
     const userType = user.user.userType;
     const { password } = req.body;
@@ -72,15 +77,93 @@ const processLogin = async (req, res, next, user) => {
 
     if (!isMatch) throw new AuthException("invalidCredential", "");
 
-    const newAccessToken = await signAccessToken(user);
+    const newAccessToken = await signAccessToken({
+      userId: user?.userId,
+      userType: user?.user?.userType,
+    });
+    const newRefreshToken = await signRefreshToken({
+      userId: user?.userId,
+      userType: user?.user?.userType,
+    });
 
-    let tokenPayload = {
-      userId: user?.user?.userId,
+    let accessTokenPayload = {
+      userId: user?.userId,
       accessToken: newAccessToken,
       ip: req?.ip,
     };
 
-    await accessToken.create(tokenPayload);
+    let refreshTokenPayload = {
+      userId: user?.user?.userId,
+      refreshToken: newRefreshToken,
+      ip: req?.ip,
+    };
+
+    await accessToken.create(accessTokenPayload);
+    await refreshToken.create(refreshTokenPayload);
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
+    return successResponse(
+      res,
+      { accessToken: newAccessToken, refreshToken: newRefreshToken },
+      "loggedIn",
+      userType
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+const refreshUserToken = async (req, res, next) => {
+  try {
+    const extractedRefreshToken = extractRefreshToken(req);
+
+    const refreshTokenPayload = await verifyRefreshToken(extractedRefreshToken);
+
+    if (!refreshTokenPayload?.sub)
+      throw new AuthException("invalidRefreshToken", "auth");
+
+    const existingRefreshToken = await refreshToken.findOne({
+      where: { refreshToken: extractedRefreshToken, isActive: true },
+    });
+
+    if (
+      !existingRefreshToken ||
+      existingRefreshToken.userId !== refreshTokenPayload?.sub
+    )
+      throw new AuthException("invalidRefreshToken", "auth");
+
+    const existingUser = await user.findOne({
+      where: { userId: existingRefreshToken.userId },
+    });
+
+    if (!existingUser) throw new AuthException("invalidRefreshToken", "auth");
+
+    const newAccessToken = await signAccessToken({
+      userId: existingUser?.userId,
+      userType: existingUser?.userType,
+    });
+
+    const accessTokenPayload = {
+      userId: existingUser?.userId,
+      accessToken: newAccessToken,
+      ip: req?.ip,
+    };
+
+    await accessToken.create(accessTokenPayload);
+
+    existingRefreshToken.timesUsed = existingRefreshToken.timesUsed + 1;
+    await existingRefreshToken.save();
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
@@ -91,12 +174,12 @@ const processLogin = async (req, res, next, user) => {
     return successResponse(
       res,
       { accessToken: newAccessToken },
-      "loggedIn",
-      userType
+      "tokenRefreshed",
+      "Refresh"
     );
   } catch (error) {
     next(error);
   }
 };
 
-export default { currentUser, signInUser };
+export default { currentUser, signInUser, refreshUserToken };
