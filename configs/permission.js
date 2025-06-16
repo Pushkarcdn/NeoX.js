@@ -6,6 +6,10 @@ const commonProtectedRoutes = [
     methods: ["GET"],
     route: "/api/me",
   },
+  {
+    methods: ["GET"],
+    route: "/api/refresh",
+  },
 ];
 
 const isUserAllowed = async (route, method, userType) => {
