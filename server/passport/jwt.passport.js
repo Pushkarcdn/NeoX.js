@@ -9,16 +9,12 @@ const { accessToken } = models;
 let extractedAccessToken = null;
 
 export const extractAccessToken = (req) => {
-  const extractedAccessToken =
-    req?.cookies?.accessToken ||
-    req?.headers?.authorization?.split(" ")[1] ||
-    null;
+  const extractedAccessToken = req?.cookies?.accessToken || null;
   return extractedAccessToken;
 };
 
 export const extractRefreshToken = (req) => {
-  const extractedRefreshToken =
-    req?.cookies?.refreshToken || req?.body?.refreshToken || null;
+  const extractedRefreshToken = req?.cookies?.refreshToken || null;
   return extractedRefreshToken;
 };
 

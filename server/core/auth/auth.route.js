@@ -5,21 +5,6 @@ import SignOutController from "./signout.controller.js";
 export default (router) => {
   /**
    * @swagger
-   * /me:
-   *   get:
-   *     tags:
-   *       - Authentication
-   *     summary: Get current user
-   *     responses:
-   *       200:
-   *         description: Current user information
-   *       401:
-   *         description: Unauthorized
-   */
-  router.route("/me").get(SigninController.currentUser);
-
-  /**
-   * @swagger
    * /signup/{userType}:
    *   post:
    *     tags:
@@ -113,6 +98,21 @@ export default (router) => {
    *         description: User not found
    */
   router.route("/signin/:userType").post(SigninController.signInUser);
+
+  /**
+   * @swagger
+   * /me:
+   *   get:
+   *     tags:
+   *       - Authentication
+   *     summary: Get current user
+   *     responses:
+   *       200:
+   *         description: Current user information
+   *       401:
+   *         description: Unauthorized
+   */
+  router.route("/me").get(SigninController.currentUser);
 
   /**
    * @swagger

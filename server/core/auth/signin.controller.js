@@ -115,7 +115,7 @@ const processAuth = async (req, res, next, user) => {
 
     return successResponse(
       res,
-      { accessToken: newAccessToken, refreshToken: newRefreshToken },
+      "Logged in successfully!",
       "loggedIn",
       userType
     );
@@ -173,7 +173,7 @@ const refreshUserToken = async (req, res, next) => {
 
     return successResponse(
       res,
-      { accessToken: newAccessToken },
+      "Token refreshed successfully!",
       "tokenRefreshed",
       "Refresh"
     );
