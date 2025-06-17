@@ -13,12 +13,12 @@ const { user, accessToken, refreshToken } = models;
 
 const currentUser = async (req, res, next) => {
   try {
-    if (req?.user) {
-      delete req?.user?.password;
-      return successResponse(res, req?.user, "fetch", "auth");
-    } else {
-      throw new AuthException("unauthorized", "auth");
-    }
+    if (!req?.user) throw new AuthException("unauthorized", "auth");
+
+    const userData = req?.user;
+    userData.password = null;
+    delete userData.password;
+    return successResponse(res, userData, "fetch", "auth");
   } catch (err) {
     next(err);
   }

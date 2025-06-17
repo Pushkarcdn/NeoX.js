@@ -7,7 +7,7 @@ const commonProtectedRoutes = [
     route: "/api/me",
   },
   {
-    methods: ["GET"],
+    methods: ["POST"],
     route: "/api/refresh",
   },
 ];

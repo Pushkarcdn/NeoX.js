@@ -22,6 +22,11 @@ export default (sequelize, DataTypes) => {
       },
       onDelete: "CASCADE",
     },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+    },
   });
 
   return Cart;

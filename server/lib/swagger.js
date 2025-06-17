@@ -1,18 +1,16 @@
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { models } from "../../configs/server.js";
+import CommonEntities from "../../configs/common.entities.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { server } from "../../configs/env.js";
 
 // Get directory name in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/**
- * Dynamically generate Swagger documentation for all routes
- * @param {Object} app - Express application
- */
 export const setupSwagger = (app) => {
   const allModels = Object.keys(models).filter(
     (model) => model?.toLowerCase() !== "sequelize"
@@ -50,7 +48,15 @@ export const setupSwagger = (app) => {
       const modelInstance = models[model];
       if (!modelInstance || !modelInstance.rawAttributes) continue;
 
-      const attributes = modelInstance.rawAttributes;
+      // Get common entity attributes dynamically from common.entities.js
+      const commonAttributeKeys = [...Object.keys(CommonEntities)];
+
+      let attributes = Object.fromEntries(
+        Object.entries(modelInstance?.rawAttributes || {}).filter(
+          ([key]) => !commonAttributeKeys.includes(key)
+        )
+      );
+
       const properties = {};
 
       for (const [key, attr] of Object.entries(attributes)) {
@@ -75,7 +81,6 @@ export const setupSwagger = (app) => {
         get: {
           tags: [model],
           summary: `Get all ${model} records`,
-          security: [{ bearerAuth: [] }],
           responses: {
             200: {
               description: "Success",
@@ -104,7 +109,6 @@ export const setupSwagger = (app) => {
         post: {
           tags: [model],
           summary: `Create a new ${model} record`,
-          security: [{ bearerAuth: [] }],
           requestBody: {
             content: {
               "application/json": {
@@ -141,13 +145,12 @@ export const setupSwagger = (app) => {
         get: {
           tags: [model],
           summary: `Get ${model} by ID`,
-          security: [{ bearerAuth: [] }],
           parameters: [
             {
               in: "path",
               name: "id",
               required: true,
-              schema: { type: "integer" },
+              schema: { type: "string", format: "uuid" },
               description: `ID of the ${model} to retrieve`,
             },
           ],
@@ -177,13 +180,12 @@ export const setupSwagger = (app) => {
         put: {
           tags: [model],
           summary: `Update ${model} by ID`,
-          security: [{ bearerAuth: [] }],
           parameters: [
             {
               in: "path",
               name: "id",
               required: true,
-              schema: { type: "integer" },
+              schema: { type: "string", format: "uuid" },
               description: `ID of the ${model} to update`,
             },
           ],
@@ -221,13 +223,12 @@ export const setupSwagger = (app) => {
         delete: {
           tags: [model],
           summary: `Delete ${model} by ID`,
-          security: [{ bearerAuth: [] }],
           parameters: [
             {
               in: "path",
               name: "id",
               required: true,
-              schema: { type: "integer" },
+              schema: { type: "string", format: "uuid" },
               description: `ID of the ${model} to delete`,
             },
           ],
@@ -279,9 +280,9 @@ export const setupSwagger = (app) => {
     definition: {
       openapi: "3.0.0",
       info: {
-        title: "NeoX.js API Documentation",
+        title: `${server.appName} API Documentation`,
         version: "1.0.0",
-        description: "Automatically generated API documentation for NeoX.js",
+        description: `Automatically generated API documentation for ${server.appName}`,
         contact: {
           name: "API Support",
           url: "https://github.com/Pushkarcdn/neoX.js",
@@ -295,146 +296,51 @@ export const setupSwagger = (app) => {
       ],
       components: {
         schemas: modelDefinitions,
-        securitySchemes: {
-          bearerAuth: {
-            type: "http",
-            scheme: "bearer",
-            bearerFormat: "JWT",
-          },
-        },
       },
-      paths: { ...modelPaths, ...customPaths },
+      paths: {},
     },
     apis: [
-      // Include route files for JSDoc comments parsing
+      // Include route files for JSDoc comments parsing first
       path.join(rootDir, "server/core/**/*.route.js"),
       path.join(rootDir, "src/modules/**/*.route.js"),
     ],
-    security: [{ bearerAuth: [] }],
   };
 
   const swaggerSpec = swaggerJsDoc(swaggerOptions);
 
-  // Add custom CSS to improve token input handling
+  // Add model paths after JSDoc paths have been processed
+  if (swaggerSpec.paths) {
+    Object.assign(swaggerSpec.paths, modelPaths);
+  } else {
+    swaggerSpec.paths = modelPaths;
+  }
+
+  // Add custom CSS for styling and hiding auth elements
   const customCss = `
-    .swagger-ui .auth-wrapper .authorize {
-      margin-right: 10px;
-      padding: 5px 10px;
+    .swagger-ui {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    .swagger-ui .auth-container input {
-      min-width: 230px;
+    
+    /* Hide all authorization related elements */
+    .swagger-ui .auth-wrapper,
+    .swagger-ui .authorization__btn,
+    .swagger-ui .authorize,
+    .swagger-ui .btn.authorize,
+    .swagger-ui .auth-btn-wrapper,
+    .swagger-ui .auth-container,
+    .swagger-ui .authorization {
+      display: none !important;
     }
-  `;
-
-  // Custom JavaScript to handle authentication properly
-  const customJs = `
-    (function() {
-      // Storage key for the auth token
-      const TOKEN_STORAGE_KEY = 'swagger_ui_token';
-      
-      // Get token from storage
-      function getToken() {
-        return localStorage.getItem(TOKEN_STORAGE_KEY) || '';
-      }
-      
-      // Save token to storage
-      function saveToken(token) {
-        if (token && token.trim()) {
-          localStorage.setItem(TOKEN_STORAGE_KEY, token);
-          console.info('Token saved to local storage');
-          return true;
-        }
-        return false;
-      }
-      
-      // Wait for Swagger UI to be fully loaded
-      window.addEventListener('load', function() {
-        console.info('Swagger UI loaded - initializing auth handlers');
-        
-        // This runs after Swagger UI is fully initialized
-        setTimeout(function() {
-          // Hook into the Authorize button actions
-          const authorizeBtn = document.querySelector('.auth-wrapper .authorize');
-          if (authorizeBtn) {
-            // Check if we already have a token and update the UI accordingly
-            if (getToken()) {
-              authorizeBtn.classList.add('authorized');
-            }
-            
-            const originalClick = authorizeBtn.onclick;
-            authorizeBtn.onclick = function(e) {
-              if (originalClick) originalClick.call(this, e);
-              
-              // Add listeners after the modal is shown
-              setTimeout(function() {
-                const authBtn = document.querySelector('.auth-btn-wrapper .btn-done');
-                if (authBtn) {
-                  authBtn.addEventListener('click', function() {
-                    // Get token value from input
-                    const tokenInput = document.querySelector('.auth-container input');
-                    if (tokenInput) {
-                      saveToken(tokenInput.value);
-                    }
-                  });
-                }
-              }, 100);
-            };
-          }
-
-          // Enhance all API requests to include authorization
-          const originalFetch = window.fetch;
-          window.fetch = function() {
-            const args = Array.prototype.slice.call(arguments);
-            
-            // First arg is the URL, second is the options object
-            if (!args[1]) args[1] = {};
-            
-            // Ensure headers exist
-            if (!args[1].headers) {
-              args[1].headers = {};
-            }
-            
-            // Use token from storage
-            const token = getToken();
-            if (token) {
-              args[1].headers['Authorization'] = 'Bearer ' + token;
-            }
-            
-            return originalFetch.apply(this, args);
-          };
-
-          // Patch XMLHttpRequest
-          const originalOpen = XMLHttpRequest.prototype.open;
-          XMLHttpRequest.prototype.open = function() {
-            const xhrArgs = Array.prototype.slice.call(arguments);
-            
-            // Apply token when request is opened
-            this.addEventListener('readystatechange', function() {
-              if (this.readyState === 1) { // OPENED
-                const token = getToken();
-                if (token) {
-                  this.setRequestHeader('Authorization', 'Bearer ' + token);
-                }
-              }
-            });
-            
-            // Call original open
-            originalOpen.apply(this, xhrArgs);
-          };
-          
-          // Update UI to show authorized state if we have a token
-          if (getToken()) {
-            const authorizeBtn = document.querySelector('.auth-wrapper .authorize');
-            if (authorizeBtn) {
-              authorizeBtn.classList.add('authorized');
-              console.info('Auth state updated in UI with saved token');
-            }
-          }
-          
-          console.info('Auth handlers initialized for Swagger UI');
-        }, 1000);
-      });
-    })();
+    
+    /* Hide the lock icons next to operations */
+    .swagger-ui .authorization__btn {
+      display: none !important;
+    }
+    
+    /* Clean up any remaining auth spacing */
+    .swagger-ui .info {
+      margin-bottom: 20px;
+    }
   `;
 
   // Setup Swagger UI with authentication
@@ -443,12 +349,6 @@ export const setupSwagger = (app) => {
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, {
       swaggerOptions: {
-        persistAuthorization: true,
-        requestInterceptor: (req) => {
-          // Server-side we don't have access to the user's localStorage
-          // The client-side JavaScript will handle adding the token
-          return req;
-        },
         responseInterceptor: (res) => {
           // Log if there were issues with the request
           if (res.status >= 400) {
@@ -458,7 +358,6 @@ export const setupSwagger = (app) => {
         },
       },
       customCss,
-      customJs,
     })
   );
 
@@ -504,11 +403,6 @@ function mapSequelizeTypeToSwagger(sequelizeType) {
   return typeMap[sequelizeType] || "string";
 }
 
-/**
- * Generate example value based on data type
- * @param {string} type - Swagger data type
- * @returns {*} - Example value
- */
 function getExampleForType(type) {
   switch (type) {
     case "string":
@@ -528,11 +422,6 @@ function getExampleForType(type) {
   }
 }
 
-/**
- * Recursively find route files in directories
- * @param {string} dir - Directory to scan
- * @param {object} customPaths - Object to collect route paths
- */
 function findRouteFiles(dir, customPaths) {
   try {
     const files = fs.readdirSync(dir);
@@ -546,26 +435,6 @@ function findRouteFiles(dir, customPaths) {
         findRouteFiles(filePath, customPaths);
       } else if (file.endsWith(".route.js")) {
         // console.info(`[Swagger]: Found route file: ${filePath}`);
-        // This will print the route file path but won't actually parse it.
-        // The actual parsing will be done by swagger-jsdoc when we include
-        // the file patterns in the 'apis' array of swaggerOptions.
-        //
-        // To use this feature, you need to add JSDoc comments to your route files like this:
-        //
-        // /**
-        //  * @swagger
-        //  * /users/profile:
-        //  *   get:
-        //  *     tags:
-        //  *       - Users
-        //  *     summary: Get user profile
-        //  *     security:
-        //  *       - bearerAuth: []
-        //  *     responses:
-        //  *       200:
-        //  *         description: User profile data
-        //  */
-        // router.get('/profile', userController.getProfile);
       }
     });
   } catch (error) {
