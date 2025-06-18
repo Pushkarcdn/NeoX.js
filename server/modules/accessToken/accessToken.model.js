@@ -1,4 +1,4 @@
-import CommonEntity from "../../../configs/common.entities.js";
+import CommonEntity from "../../../../configs/common.entities.js";
 
 export default (sequelize, DataTypes) => {
   const AccessToken = sequelize.define("accessToken", {

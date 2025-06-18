@@ -1,8 +1,8 @@
-import { AuthException } from "../../exceptions/index.js";
-import { successResponse } from "../../utils/index.js";
+import { AuthException } from "../../../exceptions/index.js";
+import { successResponse } from "../../../utils/index.js";
 
-import { models } from "../../../configs/server.js";
-import { extractAccessToken } from "../../passport/jwt.passport.js";
+import { models } from "../../../../configs/server.js";
+import { extractAccessToken } from "../../../passport/jwt.passport.js";
 
 const { accessToken } = models;
 

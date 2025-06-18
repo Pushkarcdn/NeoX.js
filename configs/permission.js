@@ -10,6 +10,14 @@ const commonProtectedRoutes = [
     methods: ["POST"],
     route: "/api/refresh",
   },
+  {
+    methods: ["PUT"],
+    route: "/api/update-my-profile",
+  },
+  {
+    methods: ["PUT"],
+    route: "/api/change-my-password",
+  },
 ];
 
 const isUserAllowed = async (route, method, userType) => {
