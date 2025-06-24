@@ -28,6 +28,14 @@ export default [
     route: "/api/signup/:userType",
   },
   {
+    methods: ["GET"],
+    route: "/api/verify-email/:token",
+  },
+  {
+    methods: ["GET"],
+    route: "/api/resend-verification-email/:userType/:email",
+  },
+  {
     methods: ["POST"],
     route: "/api/signin/:userType",
   },

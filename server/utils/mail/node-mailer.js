@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import ejs from "ejs";
-import { mailerConfig } from "../../../configs/env.js";
+import { mailerConfig, server } from "../../../configs/env.js";
 import path from "path";
 
 const nodeMailer = (data) => {
@@ -19,7 +19,6 @@ const nodeMailer = (data) => {
           viewPath: path.resolve("./views/"),
         };
         transporter.use("compile", handlebarOptions);
-        console.info("Handlebars template engine configured.");
       } else if (templateEngine === "ejs") {
         // EJS setup
         transporter.use("compile", (mail, callback) => {
@@ -39,13 +38,12 @@ const nodeMailer = (data) => {
             }
           );
         });
-        console.info("EJS template engine configured.");
       } else {
         throw new Error(`Unsupported template engine: ${templateEngine}`);
       }
 
       const mailOptions = {
-        from: `One College <${mailerConfig.auth.user}>`, // sender address
+        from: `${server.appName} <${mailerConfig.auth.user}>`, // sender address
         to: [data.reciever], // list of receivers
         subject: `${data.subject}`,
         template:

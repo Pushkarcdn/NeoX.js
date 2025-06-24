@@ -36,8 +36,6 @@ const updateMyProfile = async (req, res, next) => {
       "oAuthProvider",
     ]);
 
-    console.log(payload);
-
     const userType = userData?.user?.userType;
     const model = models[userType];
 

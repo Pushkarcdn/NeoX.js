@@ -1,9 +1,10 @@
+import { server } from "../../../configs/env.js";
 import nodeMailer from "./node-mailer.js";
 
 const sendEmailVerificationMail = async (data) => {
   const emailData = {
     reciever: data?.email, // Email recipient
-    subject: "Verify your email | One College", // Subject line
+    subject: `Verify your email | ${server.appName}`, // Subject line
     templateFile: "emailVerificationMail", // The name of the Handlebars file (without .handlebars extension)
     context: {
       name: data.name,

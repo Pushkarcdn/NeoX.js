@@ -1,6 +1,7 @@
 import { hashPassword } from "../../../lib/bcrypt.js";
 import { successResponse } from "../../../utils/index.js";
 import { ConflictException, HttpException } from "../../../exceptions/index.js";
+import { initiateEmailVerification } from "../emailVerification/emailVerification.controller.js";
 
 import { models } from "../../../../configs/server.js";
 
@@ -40,6 +41,8 @@ const signupUser = async (req, res, next) => {
     };
 
     const createdUser = await userRepository.create(userPayload);
+
+    initiateEmailVerification(createdUser, req.ip);
 
     return successResponse(res, createdUser, "create", userType);
   } catch (error) {

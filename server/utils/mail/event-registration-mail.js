@@ -1,9 +1,10 @@
 import nodeMailer from "./node-mailer.js";
+import { server } from "../../../configs/env.js";
 
 const sendEventRegistrationMail = async (data) => {
   const emailData = {
     reciever: data?.email, // Email recipient
-    subject: "Event Registration | One College", // Subject line
+    subject: `Event Registration | ${server.appName}`, // Subject line
     templateFile: "eventRegistrationMail", // The name of the Handlebars file (without .handlebars extension)
     context: {
       name: data.name,

@@ -1,11 +1,8 @@
 import { successResponse } from "../../../utils/index.js";
-import { AuthException } from "../../../exceptions/index.js";
-import { backend, frontend } from "../../../../configs/env.js";
-import { signGeneralToken, verifyGeneralToken } from "../../../lib/jwt.js";
-import sendEmailVerificationMail from "../../../utils/mail/email-verification-mail.js";
+import { frontend } from "../../../../configs/env.js";
 import { models } from "../../../../configs/server.js";
 
-const { user, admin, token } = models;
+const { user, admin } = models;
 
 const resetSuperAdmin = async (req, res, next) => {
   try {
@@ -34,115 +31,6 @@ const resetSuperAdmin = async (req, res, next) => {
   }
 };
 
-// seperate api for re-sending verification email
-const sendVerificationEmail = async (req, res, next) => {
-  try {
-    // const email = req.params.email;
-
-    // const mentor = await getMentorByEmail(email);
-    // if (!mentor) throw new AuthException("User not found", "mentor");
-
-    // if (!mentor.isEmailVerified) {
-    // await initiateEmailVerification(mentor, req.ip);
-    // }
-
-    return successResponse(
-      res,
-      "verification email sent",
-      "send",
-      "verification email"
-    );
-  } catch (error) {
-    next(error);
-  }
-};
-
-const initiateEmailVerification = async (user, ip) => {
-  try {
-    const verificationToken = await signGeneralToken({
-      userId: user.userId,
-      type: "emailVerification",
-      ip: ip,
-    });
-
-    // save the token in the database
-    const tokenPayload = {
-      userId: user.userId,
-      token: verificationToken,
-      type: "emailVerification",
-      ip: ip,
-    };
-
-    await token.create(tokenPayload);
-
-    // send mail
-    const mailData = {
-      email: user.email,
-      name: user.firstName,
-      link: `${backend.url}/api/verify-email/${verificationToken}`,
-    };
-    await sendEmailVerificationMail(mailData);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const verifyEmail = async (req, res) => {
-  try {
-    const token = req.params.token;
-
-    const tokenData = await verifyGeneralToken(token);
-    if (!tokenData)
-      return res.redirect(`${frontend.url}/email-verification/failed`);
-
-    const savedToken = await token.findOne({
-      where: {
-        token,
-        type: "emailVerification",
-      },
-    });
-
-    if (!savedToken) {
-      return res.redirect(`${frontend.url}/email-verification/failed`);
-    }
-
-    // find user
-    const user = await user.findByPk(savedToken.userId);
-
-    // pre set condition and update
-    const condition = {
-      userId: user.userId,
-    };
-
-    const update = {
-      isEmailVerified: true,
-    };
-
-    let url;
-
-    // update user based on user type
-    switch (user?.userType) {
-      case "mentor":
-        // await updateMentorByFieldName(condition, update);
-        url = `${frontend.url}/mentor/signin`;
-        break;
-      default:
-        throw new AuthException("invalidToken", "email verification");
-    }
-
-    // await invalidateToken(token);
-
-    return res.redirect(url);
-  } catch (error) {
-    console.error(error);
-    return res.redirect(`${frontend.url}/email-verification/failed`);
-    // next(error);
-  }
-};
-
 export default {
   resetSuperAdmin,
-  sendVerificationEmail,
-  verifyEmail,
-  initiateEmailVerification,
 };

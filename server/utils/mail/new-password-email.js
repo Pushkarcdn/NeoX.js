@@ -1,9 +1,10 @@
 import nodeMailer from "./node-mailer.js";
+import { server } from "../../../configs/env.js";
 
 const sendNewPasswordEmail = async (data) => {
   const emailData = {
     reciever: data?.email, // Email recipient
-    subject: "Password reset | One College", // Subject line
+    subject: `Password reset | ${server.appName}`, // Subject line
     templateFile: "newPasswordMail", // The name of the Handlebars file (without .ejs or .handlebars extension)
     context: {
       name: data.name,
