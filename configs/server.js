@@ -1,8 +1,11 @@
 import rateLimit from "express-rate-limit";
 import db from "../server/lib/sequelize.js";
 import { server } from "./env.js";
+import sendEmail from "../server/utils/mail/node-mailer.js";
 
 export const models = db;
+
+export { sendEmail };
 
 // Rate limiting
 export const limiter = rateLimit({
