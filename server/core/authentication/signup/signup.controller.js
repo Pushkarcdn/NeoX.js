@@ -44,7 +44,7 @@ const signupUser = async (req, res, next) => {
 
     initiateEmailVerification(createdUser, req.ip);
 
-    return successResponse(res, createdUser, "create", userType);
+    return successResponse(res, {}, "create", userType);
   } catch (error) {
     next(error);
   }

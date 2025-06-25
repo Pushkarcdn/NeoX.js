@@ -46,7 +46,6 @@ export const mailerConfig = {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASSWORD,
   },
-  templateEngine: process.env.TEMPLATE_ENGINE,
 };
 
 // Email addresses for recieving emails

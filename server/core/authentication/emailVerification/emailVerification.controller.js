@@ -2,9 +2,9 @@ import { AuthException } from "../../../exceptions/index.js";
 import { successResponse } from "../../../utils/index.js";
 import { signGeneralToken, verifyGeneralToken } from "../../../lib/jwt.js";
 import { backend, frontend } from "../../../../configs/env.js";
-import sendEmailVerificationMail from "../../../utils/mail/email-verification-mail.js";
 
 import { models } from "../../../../configs/server.js";
+import sendEmail from "../../../utils/mail/node-mailer.js";
 const { token, user } = models;
 
 const initiateEmailVerification = async (user, ip) => {
@@ -27,11 +27,17 @@ const initiateEmailVerification = async (user, ip) => {
 
     // send mail
     const mailData = {
-      email: user.email,
-      name: user.firstName,
-      link: `${backend.url}/api/verify-email/${verificationToken}`,
+      reciever: user.email,
+      subject: "Verify your email",
+      templateFile: "emailVerificationMail.ejs",
+      variables: {
+        name: user.firstName,
+        link: `${backend.url}/api/verify-email/${verificationToken}`,
+      },
+      priority: "normal",
     };
-    await sendEmailVerificationMail(mailData);
+
+    await sendEmail(mailData);
   } catch (error) {
     console.error(error);
   }
@@ -71,7 +77,7 @@ const resendVerificationEmail = async (req, res, next) => {
       res,
       "verification email sent",
       "send",
-      "verification email"
+      "verification email",
     );
   } catch (error) {
     console.error(error);

@@ -1,54 +1,66 @@
-import nodemailer from "nodemailer";
 import ejs from "ejs";
-import { mailerConfig, server } from "../../../configs/env.js";
 import path from "path";
+import nodemailer from "nodemailer";
+import { frontend, mailerConfig, server } from "../../../configs/env.js";
 
-const nodeMailer = (data) => {
+const sendEmail = (data) => {
   return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport(mailerConfig);
-    const templateEngine = mailerConfig.templateEngine;
 
     try {
-      if (templateEngine === "handlebars") {
-        // Handlebars setup
-        const handlebarOptions = {
-          viewEngine: {
-            partialsDir: path.resolve("./views/"),
-            defaultLayout: false,
-          },
-          viewPath: path.resolve("./views/"),
-        };
-        transporter.use("compile", handlebarOptions);
-      } else if (templateEngine === "ejs") {
-        // EJS setup
-        transporter.use("compile", (mail, callback) => {
-          ejs.renderFile(
-            path.join(
-              path.resolve("public/views/emailTemplates"),
-              `${data.templateFile}.ejs`
-            ),
-            data.context,
-            (err, renderedHtml) => {
-              if (err) {
-                console.error(`Error rendering EJS template: ${err.message}`);
-                return callback(err);
-              }
-              mail.data.html = renderedHtml;
-              callback();
-            }
-          );
-        });
-      } else {
-        throw new Error(`Unsupported template engine: ${templateEngine}`);
+      if (!data?.reciever) {
+        return reject(new Error("Reciever is required!"));
+      } else if (!data?.subject) {
+        return reject(new Error("Subject is required!"));
+      } else if (!data?.templateFile) {
+        return reject(new Error("Template file is required!"));
+      } else if (!server?.appName) {
+        return reject(new Error("Set the app name in the env file!"));
+      } else if (!frontend?.url) {
+        return reject(new Error("Set the frontend URL in the env file!"));
       }
+
+      data.subject = `${data.subject} | ${server.appName}`;
+      data.priority = data?.priority || "normal";
+      data.variables = data?.variables || {};
+
+      // Remove the .ejs extension if it exists
+      if (data.templateFile.includes(".ejs")) {
+        data.templateFile = data.templateFile.replace(".ejs", "");
+      }
+
+      const context = {
+        ...data.variables,
+        appName: server.appName,
+        appUrl: frontend.url.replace("http://", "").replace("https://", ""),
+        appLogo: `${frontend.url}/favicon.ico`,
+      };
+
+      // EJS template setup
+      transporter.use("compile", (mail, callback) => {
+        ejs.renderFile(
+          path.join(
+            path.resolve("public/views/emailTemplates"),
+            `${data.templateFile}.ejs`,
+          ),
+          context,
+          (err, renderedHtml) => {
+            if (err) {
+              console.error(`Error rendering EJS template: ${err.message}`);
+              return callback(err);
+            }
+            mail.data.html = renderedHtml;
+            callback();
+          },
+        );
+      });
 
       const mailOptions = {
         from: `${server.appName} <${mailerConfig.auth.user}>`, // sender address
         to: [data.reciever], // list of receivers
-        subject: `${data.subject}`,
-        template:
-          templateEngine === "handlebars" ? data.templateFile : undefined, // Only set for Handlebars
-        context: templateEngine === "handlebars" ? data.context : undefined,
+        subject: data.subject,
+        template: data.templateFile,
+        context,
       };
 
       // Send the email
@@ -57,7 +69,7 @@ const nodeMailer = (data) => {
           console.error(`Failed to send email: ${error.message}`);
           return reject(error);
         }
-        console.info(`Message sent: ${info.response}`);
+        console.info(`Mail sent: ${info.response}`);
         resolve(`Mail sent to ${data.reciever} successfully`);
       });
     } catch (err) {
@@ -67,4 +79,4 @@ const nodeMailer = (data) => {
   });
 };
 
-export default nodeMailer;
+export default sendEmail;
