@@ -11,7 +11,7 @@ export default (router) => {
       }
 
       if (!user) {
-        console.log("No user found");
+        console.error("No user found");
         return res.redirect("/");
       }
 
@@ -34,14 +34,14 @@ export default (router) => {
           const userType = user.userType;
 
           if (!userType) {
-            console.log("No user type found");
+            console.error("No user type found");
             return res.redirect("/");
           }
 
           const userModel = models?.[userType];
 
           if (!userModel) {
-            console.log("No user model found for type:", userType);
+            console.error("No user model found for type:", userType);
             return res.redirect("/");
           }
 
@@ -52,7 +52,6 @@ export default (router) => {
 
           // Redirect to frontend
           const redirectUrl = `${frontend.url}/${userType}`;
-          console.log("Redirecting to:", redirectUrl);
           return res.redirect(redirectUrl);
         });
       } catch (error) {
