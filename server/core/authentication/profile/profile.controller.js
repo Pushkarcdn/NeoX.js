@@ -1,6 +1,6 @@
 import { AuthException, HttpException } from "../../../exceptions/index.js";
-import { successResponse } from "../../../utils/index.js";
-import { models } from "../../../../configs/server.js";
+import successResponse from "../../../utils/responses/successResponse.js";
+import { models } from "../../../../configs/server.config.js";
 import { sanitizePayload } from "../../../utils/filters/payloadFilter.js";
 
 const currentUser = async (req, res, next) => {

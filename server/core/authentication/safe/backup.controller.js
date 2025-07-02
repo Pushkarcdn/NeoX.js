@@ -1,6 +1,6 @@
-import { successResponse } from "../../../utils/index.js";
-import { frontend } from "../../../../configs/env.js";
-import { models } from "../../../../configs/server.js";
+import successResponse from "../../../utils/responses/successResponse.js";
+import { frontend } from "../../../../configs/env.config.js";
+import { models } from "../../../../configs/server.config.js";
 
 const { user, admin } = models;
 

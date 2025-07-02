@@ -1,7 +1,7 @@
 import ejs from "ejs";
 import path from "path";
 import nodemailer from "nodemailer";
-import { frontend, mailerConfig, server } from "../../../configs/env.js";
+import { frontend, mailerConfig, server } from "../../../configs/env.config.js";
 
 const sendEmail = (data) => {
   return new Promise((resolve, reject) => {

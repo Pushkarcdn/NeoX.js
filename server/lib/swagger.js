@@ -1,11 +1,11 @@
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import { models } from "../../configs/server.js";
+import { models } from "../../configs/server.config.js";
 import CommonEntities from "../../configs/common.entities.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { server } from "../../configs/env.js";
+import { server } from "../../configs/env.config.js";
 
 // Get directory name in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 
 export const setupSwagger = (app) => {
   const allModels = Object.keys(models).filter(
-    (model) => model?.toLowerCase() !== "sequelize"
+    (model) => model?.toLowerCase() !== "sequelize",
   );
 
   // Add CORS middleware specifically for Swagger routes to ensure credentials work
@@ -23,11 +23,11 @@ export const setupSwagger = (app) => {
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader(
       "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
     );
     res.setHeader(
       "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS"
+      "GET, POST, PUT, DELETE, OPTIONS",
     );
 
     // For preflight requests
@@ -53,15 +53,15 @@ export const setupSwagger = (app) => {
 
       let attributes = Object.fromEntries(
         Object.entries(modelInstance?.rawAttributes || {}).filter(
-          ([key]) => !commonAttributeKeys.includes(key)
-        )
+          ([key]) => !commonAttributeKeys.includes(key),
+        ),
       );
 
       const properties = {};
 
       for (const [key, attr] of Object.entries(attributes)) {
         const type = mapSequelizeTypeToSwagger(
-          attr.type.key || attr.type.constructor.key
+          attr.type.key || attr.type.constructor.key,
         );
         properties[key] = {
           type,
@@ -358,7 +358,7 @@ export const setupSwagger = (app) => {
         },
       },
       customCss,
-    })
+    }),
   );
 
   // Route to get the Swagger JSON

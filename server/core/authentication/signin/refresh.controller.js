@@ -1,8 +1,8 @@
-import { successResponse } from "../../../utils/index.js";
+import successResponse from "../../../utils/responses/successResponse.js";
 import { AuthException } from "../../../exceptions/index.js";
 import { extractRefreshToken } from "../../../passport/jwt.passport.js";
 
-import { models } from "../../../../configs/server.js";
+import { models } from "../../../../configs/server.config.js";
 import { signAccessToken, verifyRefreshToken } from "../../../lib/jwt.js";
 
 const { user, accessToken, refreshToken } = models;
@@ -58,7 +58,7 @@ const refreshUserToken = async (req, res, next) => {
       res,
       "Token refreshed successfully!",
       "tokenRefreshed",
-      "Refresh"
+      "Refresh",
     );
   } catch (error) {
     next(error);

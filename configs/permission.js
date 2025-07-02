@@ -24,7 +24,7 @@ const isUserAllowed = async (route, method, userType) => {
   if (userType === "superAdmin") return true;
 
   const permissionsPath = path.resolve(
-    `src/modules/user/${userType}/${userType}.permissions.js`
+    `src/modules/user/${userType}/${userType}.permissions.js`,
   );
 
   if (!fs.existsSync(permissionsPath)) {
@@ -41,13 +41,13 @@ const isUserAllowed = async (route, method, userType) => {
   // Check if the route and method match
   const isMatch = allowedRoutes.some((item) => {
     const normalizedMethods = item.methods.map((method) =>
-      method.toUpperCase()
+      method.toUpperCase(),
     );
 
     // Convert dynamic route patterns like `/api/testimonials/:id` into a regex
     const routePattern = new RegExp(
       `^${item.route.replace(/:\w+/g, "[^/]+")}$`,
-      "i" // Case-insensitive
+      "i", // Case-insensitive
     );
 
     return (
@@ -58,7 +58,7 @@ const isUserAllowed = async (route, method, userType) => {
 
   if (!isMatch) {
     console.error(
-      `User is not authorized to access this resource. [userType: ${userType}] route: ${route} [${method}]`
+      `User is not authorized to access this resource. [userType: ${userType}] route: ${route} [${method}]`,
     );
   }
   return isMatch;

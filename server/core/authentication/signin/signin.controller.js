@@ -1,8 +1,8 @@
 import { AuthException, HttpException } from "../../../exceptions/index.js";
-import { successResponse } from "../../../utils/index.js";
+import successResponse from "../../../utils/responses/successResponse.js";
 import { signAccessToken, signRefreshToken } from "../../../lib/jwt.js";
 import { verifyHashedPassword } from "../../../lib/bcrypt.js";
-import { models } from "../../../../configs/server.js";
+import { models } from "../../../../configs/server.config.js";
 
 const { user, accessToken, refreshToken } = models;
 
@@ -51,7 +51,7 @@ const processAuth = async (req, res, next, user) => {
           oauthProvider +
           " as you have signed up with " +
           oauthProvider,
-        "OAuth"
+        "OAuth",
       );
     }
 
@@ -99,7 +99,7 @@ const processAuth = async (req, res, next, user) => {
       res,
       "Logged in successfully!",
       "loggedIn",
-      userType
+      userType,
     );
   } catch (error) {
     next(error);

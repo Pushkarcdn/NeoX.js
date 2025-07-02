@@ -1,4 +1,4 @@
-class SuccessResponse {
+export class SuccessResponse {
   constructor() {
     this.success = true;
     this.status = null;
@@ -9,7 +9,7 @@ class SuccessResponse {
   }
 }
 
-class ErrorResponse {
+export class ErrorResponse {
   constructor(status, message, source) {
     this.status = status;
     this.message = message;
@@ -20,5 +20,3 @@ class ErrorResponse {
   message;
   source;
 }
-
-export { SuccessResponse, ErrorResponse };

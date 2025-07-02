@@ -6,6 +6,7 @@ import morgan from "morgan";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import passport from "passport";
+import session from "express-session";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import httpContext from "express-http-context";
@@ -15,12 +16,12 @@ import db from "./lib/sequelize.js";
 import upload from "./lib/multer.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
 import passportJwtConfig from "./passport/jwt.passport.js";
-import { errorResponse, formattedMsg } from "./utils/index.js";
-import { errorMsg } from "./utils/messages/message.js";
+import passportGoogleConfig from "./passport/google.passport.js";
+import errorResponse from "./utils/responses/errorResponse.js";
 import { setIp } from "./middlewares/ip.middleware.js";
 import { setupSwagger } from "./lib/swagger.js";
-import { frontend, database, server } from "../configs/env.js";
-import { limiter } from "../configs/server.js";
+import { frontend, database, server } from "../configs/env.config.js";
+import { limiter, sessionConfig } from "../configs/server.config.js";
 
 const app = express();
 const router = express.Router();
@@ -36,8 +37,14 @@ app.use(cookieParser()); // Parse cookies from HTTP requests
 app.use(httpContext.middleware); // Attach request-scoped data (context)
 app.use(setIp); // Set the IP address of the request origin in the request
 
+// Configure express-session middleware
+app.use(session(sessionConfig));
+
 // Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
 passportJwtConfig(passport);
+passportGoogleConfig(passport);
 
 app.use(authMiddleware); // Global authentication middleware
 
@@ -52,7 +59,7 @@ if (
       origin: true,
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    })
+    }),
   );
   app.use(morgan("dev", {})); // Dev logging format
 } else {
@@ -61,7 +68,7 @@ if (
       origin: frontend.url,
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    })
+    }),
   );
   app.use(morgan("combined", {})); // More detailed logging for production
 }
@@ -130,19 +137,15 @@ app.use((err, req, res, next) => {
     const source = err?.source || `[${method}] ${path}`;
     const stack = err?.stack || "No stack trace available";
 
-    const modifiedMessage = errorMsg[message]
-      ? formattedMsg(err, errorMsg)
-      : message;
-
     console.error(
-      `\n[${method}] ${path} >> StatusCode: ${status}, Message: ${message}`
+      `\n[${method}] ${path} >> StatusCode: ${status}, Message: ${message}`,
     );
 
     console.error(
-      `${"-".repeat(100)} \nStack: ${stack} \n${"-".repeat(100)}\n`
+      `${"-".repeat(100)} \nStack: ${stack} \n${"-".repeat(100)}\n`,
     );
 
-    errorObj = errorResponse(status, modifiedMessage, source);
+    errorObj = errorResponse(status, message, source);
 
     return res.status(status).send(errorObj); // Send the error response as JSON
   } catch (error) {

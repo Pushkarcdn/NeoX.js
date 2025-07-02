@@ -1,8 +1,8 @@
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import { jwtConfig } from "../../configs/env.js";
+import { jwtConfig } from "../../configs/env.config.js";
 import { isUserAllowed } from "../../configs/permission.js";
 
-import { models } from "../../configs/server.js";
+import { models } from "../../configs/server.config.js";
 
 const { accessToken } = models;
 
@@ -84,8 +84,8 @@ const jwtPassportConfig = (passport) => {
           console.error("Error in jwt.passport.js: ", err);
           return done(err, false);
         }
-      }
-    )
+      },
+    ),
   );
 };
 

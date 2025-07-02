@@ -2,8 +2,8 @@ import pg from "pg";
 import { sync } from "glob";
 import cls from "cls-hooked";
 import { Sequelize } from "sequelize";
-import { isIterable } from "../utils/index.js";
-import { postgres, database } from "../../configs/env.js";
+import isIterable from "../utils/validation/isIterable.js";
+import { postgres, database } from "../../configs/env.config.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -78,15 +78,15 @@ const sequelize = new Sequelize(
         },
       },
     },
-  }
+  },
 );
 
 // Load all model files and initialize models
 const moduleModels = sync(
-  path.join(__dirname, "../../src/modules/**/*.model.js")
+  path.join(__dirname, "../../src/modules/**/*.model.js"),
 );
 const coreModels = sync(
-  path.join(__dirname, "../../server/core/**/*.model.js")
+  path.join(__dirname, "../../server/core/**/*.model.js"),
 );
 
 const allModels = [...moduleModels, ...coreModels];
@@ -102,7 +102,7 @@ const loadModels = async () => {
 
       if (!importedModel.default) {
         console.error(
-          `⚠️ Model file ${modelFile} does not export a default function.`
+          `⚠️ Model file ${modelFile} does not export a default function.`,
         );
         continue;
       }
@@ -111,7 +111,7 @@ const loadModels = async () => {
 
       if (!model || !model.name) {
         console.error(
-          `⚠️ Model from ${modelFile} did not initialize correctly.`
+          `⚠️ Model from ${modelFile} did not initialize correctly.`,
         );
         continue;
       }

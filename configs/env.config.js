@@ -27,6 +27,11 @@ export const backend = {
   url: process.env.BACKEND_URL,
 };
 
+// session
+export const session = {
+  secret: process.env.SESSION_SECRET,
+};
+
 // JWT Token Configuration
 export const jwtConfig = {
   accessTokenSecret: process.env.ACCESS_TOKEN_SECRET,

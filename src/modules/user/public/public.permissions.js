@@ -43,4 +43,12 @@ export default [
     methods: ["GET"],
     route: "/api/signout",
   },
+  {
+    methods: ["GET"],
+    route: "/api/auth/google/:userType",
+  },
+  {
+    methods: ["GET"],
+    route: "/api/auth/google/callback",
+  },
 ];

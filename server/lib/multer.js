@@ -2,7 +2,7 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
-import { fileStorage } from "../../configs/env.js";
+import { fileStorage } from "../../configs/env.config.js";
 import { uploadToCloudinary } from "./cloudinary.js";
 import { HttpException } from "../exceptions/index.js";
 
@@ -33,7 +33,7 @@ const diskStorage = multer.diskStorage({
 
     // Creating the final filename
     const filename = `${userId}-${timestamp}-${randomStr}${path.extname(
-      file.originalname
+      file.originalname,
     )}`;
 
     req.body[file.fieldname] = `${fullPath}/${filename}`.slice(8);
@@ -52,7 +52,7 @@ const upload = (req, res, next) => {
       throw new HttpException(
         400,
         "Invalid file storage target!",
-        "File Upload"
+        "File Upload",
       );
     }
 

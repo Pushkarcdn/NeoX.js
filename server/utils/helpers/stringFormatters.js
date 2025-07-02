@@ -1,4 +1,4 @@
-function formatTitle(title) {
+export function formatTitle(title) {
   // Remove special characters
   let formattedTitle = title.replace(/[^a-zA-Z0-9\s|-]/g, "");
 
@@ -11,7 +11,7 @@ function formatTitle(title) {
   return formattedTitle;
 }
 
-function slugify({ title, unique = false }) {
+export function slugify({ title, unique = false }) {
   // Convert the title to lowercase
   let slug = title.toLowerCase();
 
@@ -30,7 +30,7 @@ function slugify({ title, unique = false }) {
   return slug;
 }
 
-function generateRandomPassword() {
+export function generateRandomPassword() {
   const chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let password = "";
@@ -42,5 +42,3 @@ function generateRandomPassword() {
 
   return password;
 }
-
-export { formatTitle, slugify, generateRandomPassword };

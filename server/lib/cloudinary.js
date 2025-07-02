@@ -1,4 +1,4 @@
-import { cloudinary } from "../../configs/env.js";
+import { cloudinary } from "../../configs/env.config.js";
 import { v2 as cloudinaryConfig } from "cloudinary";
 import streamifier from "streamifier";
 
@@ -19,7 +19,7 @@ export const uploadToCloudinary = async (req, res) => {
           (error, result) => {
             if (error) reject(error);
             else resolve(result.secure_url);
-          }
+          },
         );
         streamifier.createReadStream(buffer).pipe(stream);
       });

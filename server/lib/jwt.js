@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { jwtConfig } from "../../configs/env.js";
+import { jwtConfig } from "../../configs/env.config.js";
 import { AuthException } from "../exceptions/index.js";
 
 const signAccessToken = (user) => {
@@ -23,7 +23,7 @@ const signAccessToken = (user) => {
           return;
         }
         resolve(token);
-      }
+      },
     );
   });
 };
@@ -49,7 +49,7 @@ const signRefreshToken = (user) => {
           return;
         }
         resolve(token);
-      }
+      },
     );
   });
 };
@@ -69,7 +69,7 @@ const signGeneralToken = (payload) => {
           return;
         }
         resolve(token);
-      }
+      },
     );
   });
 };

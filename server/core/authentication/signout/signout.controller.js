@@ -1,7 +1,7 @@
 import { AuthException } from "../../../exceptions/index.js";
-import { successResponse } from "../../../utils/index.js";
+import successResponse from "../../../utils/responses/successResponse.js";
 
-import { models } from "../../../../configs/server.js";
+import { models } from "../../../../configs/server.config.js";
 import { extractAccessToken } from "../../../passport/jwt.passport.js";
 
 const { accessToken } = models;
@@ -21,7 +21,7 @@ const signOutUser = async (req, res, next) => {
         where: {
           accessToken: accessTokenFromCookie,
         },
-      }
+      },
     );
 
     res.clearCookie("accessToken", {
@@ -40,7 +40,7 @@ const signOutUser = async (req, res, next) => {
       res,
       "User signed out successfully!",
       "loggedOut",
-      "auth.signout"
+      "auth.signout",
     );
   } catch (error) {
     next(error);

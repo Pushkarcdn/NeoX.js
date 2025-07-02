@@ -1,6 +1,6 @@
 import { AuthException, HttpException } from "../../../exceptions/index.js";
-import { successResponse } from "../../../utils/index.js";
-import { models } from "../../../../configs/server.js";
+import successResponse from "../../../utils/responses/successResponse.js";
+import { models } from "../../../../configs/server.config.js";
 import { hashPassword, verifyHashedPassword } from "../../../lib/bcrypt.js";
 
 const changeMyPassword = async (req, res, next) => {
@@ -14,7 +14,7 @@ const changeMyPassword = async (req, res, next) => {
       throw new HttpException(
         400,
         "Required all fields including currentPassword, newPassword and confirmPassword!",
-        "change password"
+        "change password",
       );
     }
 
@@ -22,7 +22,7 @@ const changeMyPassword = async (req, res, next) => {
       throw new HttpException(
         400,
         "Password must be at least 8 characters long!",
-        "change password"
+        "change password",
       );
     }
 
@@ -30,7 +30,7 @@ const changeMyPassword = async (req, res, next) => {
       throw new HttpException(
         400,
         "Passwords do not match!",
-        "change password"
+        "change password",
       );
     }
 
@@ -41,7 +41,7 @@ const changeMyPassword = async (req, res, next) => {
 
     const isPasswordValid = await verifyHashedPassword(
       currentPassword,
-      userData?.password
+      userData?.password,
     );
 
     if (!isPasswordValid) {
@@ -53,7 +53,7 @@ const changeMyPassword = async (req, res, next) => {
       { password: hashedPassword },
       {
         where: { id: userData.id },
-      }
+      },
     );
 
     return successResponse(res, {}, "update", "password");

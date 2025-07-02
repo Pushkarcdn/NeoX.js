@@ -1,10 +1,10 @@
 import { AuthException } from "../../../exceptions/index.js";
-import { successResponse } from "../../../utils/index.js";
+import successResponse from "../../../utils/responses/successResponse.js";
 import { signGeneralToken, verifyGeneralToken } from "../../../lib/jwt.js";
-import { backend, frontend } from "../../../../configs/env.js";
+import { backend, frontend } from "../../../../configs/env.config.js";
 
-import { models } from "../../../../configs/server.js";
-import sendEmail from "../../../utils/mail/node-mailer.js";
+import { models } from "../../../../configs/server.config.js";
+import sendEmail from "../../../utils/mail/nodeMailer.js";
 const { token, user } = models;
 
 const initiateEmailVerification = async (user, ip) => {

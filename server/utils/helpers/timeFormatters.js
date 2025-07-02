@@ -1,4 +1,4 @@
-function secondsAgo(createdAt) {
+export function secondsAgo(createdAt) {
   // Parse the createdAt string into a Date object
   const createdAtDate = new Date(createdAt);
 
@@ -13,5 +13,3 @@ function secondsAgo(createdAt) {
 
   return secondsAgo;
 }
-
-module.exports = { secondsAgo };

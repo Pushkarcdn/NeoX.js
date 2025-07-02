@@ -22,7 +22,7 @@ export default (sequelize, DataTypes) => {
     },
     profession: {
       type: DataTypes.STRING(64),
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING(128),
@@ -42,7 +42,7 @@ export default (sequelize, DataTypes) => {
     },
     phone: {
       type: DataTypes.STRING(16),
-      allowNull: false,
+      allowNull: true,
       unique: {
         args: true,
         msg: "Phone already exists!",
@@ -50,15 +50,15 @@ export default (sequelize, DataTypes) => {
     },
     address: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
     },
     gender: {
       type: DataTypes.ENUM("male", "female", "others"),
-      allowNull: false,
+      allowNull: true,
     },
     profileImage: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
     oAuthProvider: {
       type: DataTypes.STRING(32),

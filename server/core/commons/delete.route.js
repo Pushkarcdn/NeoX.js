@@ -1,11 +1,11 @@
 import { NotFoundException } from "../../exceptions/index.js";
-import { models } from "../../../configs/server.js";
-import { successResponse } from "../../utils/index.js";
+import { models } from "../../../configs/server.config.js";
+import successResponse from "../../utils/responses/successResponse.js";
 
 export default (router) => {
   const allModels = Object.keys(models);
   const filteredModels = allModels.filter(
-    (model) => model?.toLowerCase() !== "sequelize"
+    (model) => model?.toLowerCase() !== "sequelize",
   );
 
   filteredModels.forEach((model) => {
