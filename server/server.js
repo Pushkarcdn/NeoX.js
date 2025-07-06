@@ -47,7 +47,6 @@ passportJwtConfig(passport);
 passportGoogleConfig(passport);
 
 if (server.env === "local" || server.env === "development") {
-  console.log("CORS:", frontend.url, ":", server.env);
   app.use(
     cors({
       origin: frontend.url,

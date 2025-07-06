@@ -10,6 +10,10 @@ export default (sequelize, DataTypes) => {
       values: ["superAdmin", "admin", "seller", "buyer"],
       allowNull: false,
     },
+    lastLogin: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   });
 
   return User;

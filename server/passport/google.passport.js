@@ -1,9 +1,6 @@
 import GoogleStrategy from "passport-google-oauth20";
 import { oauth } from "../../configs/env.config.js";
-import { signAccessToken } from "../lib/jwt.js";
 import { models } from "../../configs/server.config.js";
-
-const { accessToken: accessTokenModel } = models;
 
 export default (passport) => {
   passport.serializeUser((user, done) => {
@@ -76,40 +73,20 @@ export default (passport) => {
               userId: newUser.userId,
               isEmailVerified: true,
               email: profile.emails[0].value,
-              name: profile.displayName,
-              profilePicture: profile.photos[0].value,
-              firstName: profile.name.givenName,
-              lastName: profile.name.familyName,
+              name: profile.displayName || "User",
+              firstName: profile.name.givenName || "User",
+              lastName: profile.name.familyName || "User",
               ip: req.ip,
-              profileImage: profile.photos[0].value,
+              profileImage: profile?.photos[0]?.value || null,
               phone: profile.phoneNumber || null,
               gender: profile.gender || null,
+              isTermsAndConditionsAccepted: true,
             });
           }
 
-          const jwtToken = await signAccessToken({
-            userId: user.userId,
-            userType,
-          });
-
-          let tokenPayload = {
-            userId: user.userId,
-            accessToken: jwtToken,
-            ip: req.ip,
-          };
-
-          await accessTokenModel.create(tokenPayload);
-
-          // Store the token on the request object for the callback route
-          req.accessToken = jwtToken;
-
-          // Return a plain object for the user to avoid serialization issues
           return done(null, {
-            id: user.id,
-            userId: user.userId,
-            userType,
-            email: user.email,
-            name: user.name || `${user.firstName} ${user.lastName}`,
+            ...user?.dataValues,
+            user: { userType },
           });
         } catch (err) {
           console.error("Google OAuth Error:", err);

@@ -1,10 +1,11 @@
 import { AuthException, HttpException } from "../../../exceptions/index.js";
 import successResponse from "../../../utils/responses/successResponse.js";
+import { frontend } from "../../../../configs/env.config.js";
 import { signAccessToken, signRefreshToken } from "../../../lib/jwt.js";
 import { verifyHashedPassword } from "../../../lib/bcrypt.js";
 import { models } from "../../../../configs/server.config.js";
 
-const { user, accessToken, refreshToken } = models;
+const { user: commonUserModel, accessToken, refreshToken } = models;
 
 const signInUser = async (req, res, next) => {
   try {
@@ -23,7 +24,7 @@ const signInUser = async (req, res, next) => {
       where: { email },
       include: [
         {
-          model: user,
+          model: commonUserModel,
           as: "user",
         },
       ],
@@ -31,20 +32,11 @@ const signInUser = async (req, res, next) => {
 
     if (!existingUser) throw new AuthException("invalidCredential", userType);
 
-    processAuth(req, res, next, existingUser);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const processAuth = async (req, res, next, user) => {
-  try {
-    const userType = user.user.userType;
     const { password } = req.body;
-    const hashedPassword = user.password;
+    const hashedPassword = existingUser.password;
 
-    if (!hashedPassword && user?.oAuthId) {
-      const oauthProvider = user?.oAuthProvider;
+    if (!hashedPassword && existingUser?.oAuthId) {
+      const oauthProvider = existingUser?.oAuthProvider;
       throw new HttpException(
         403,
         "Please sign in with " +
@@ -59,13 +51,30 @@ const processAuth = async (req, res, next, user) => {
 
     if (!isMatch) throw new AuthException("invalidCredential", "");
 
+    processAuth(req, res, next, existingUser, "response");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const processAuth = async (
+  req,
+  res,
+  next,
+  user,
+  responseType = "response",
+) => {
+  try {
+    const userType = user?.user?.userType;
+    if (!userType) throw new HttpException(404, "User type not found", "auth");
+
     const newAccessToken = await signAccessToken({
       userId: user?.userId,
-      userType: user?.user?.userType,
+      userType,
     });
     const newRefreshToken = await signRefreshToken({
       userId: user?.userId,
-      userType: user?.user?.userType,
+      userType,
     });
 
     let accessTokenPayload = {
@@ -75,13 +84,18 @@ const processAuth = async (req, res, next, user) => {
     };
 
     let refreshTokenPayload = {
-      userId: user?.user?.userId,
+      userId: user.userId,
       refreshToken: newRefreshToken,
       ip: req?.ip,
     };
 
     await accessToken.create(accessTokenPayload);
     await refreshToken.create(refreshTokenPayload);
+
+    // Update last login time
+    commonUserModel
+      .update({ lastLogin: new Date() }, { where: { userId: user.userId } })
+      .catch((err) => console.error("Error updating last login:", err));
 
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
@@ -95,12 +109,18 @@ const processAuth = async (req, res, next, user) => {
       sameSite: "none",
     });
 
-    return successResponse(
-      res,
-      "Logged in successfully!",
-      "loggedIn",
-      userType,
-    );
+    if (responseType === "redirect") {
+      // Redirect to frontend
+      const redirectUrl = `${frontend.url}/dashboard`;
+      return res.redirect(redirectUrl);
+    } else {
+      return successResponse(
+        res,
+        "Logged in successfully!",
+        "loggedIn",
+        userType,
+      );
+    }
   } catch (error) {
     next(error);
   }
