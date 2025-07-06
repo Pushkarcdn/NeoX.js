@@ -46,17 +46,11 @@ app.use(passport.session());
 passportJwtConfig(passport);
 passportGoogleConfig(passport);
 
-app.use(authMiddleware); // Global authentication middleware
-
-app.use(upload);
-
-if (
-  process.env.NODE_ENV === "local" ||
-  process.env.NODE_ENV === "development"
-) {
+if (server.env === "local" || server.env === "development") {
+  console.log("CORS:", frontend.url, ":", server.env);
   app.use(
     cors({
-      origin: true,
+      origin: frontend.url,
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     }),
@@ -72,6 +66,10 @@ if (
   );
   app.use(morgan("combined", {})); // More detailed logging for production
 }
+
+app.use(authMiddleware); // Global authentication middleware
+
+app.use(upload);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

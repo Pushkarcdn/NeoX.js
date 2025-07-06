@@ -24,7 +24,7 @@ export default (router) => {
           }
 
           // Set the access token in a cookie
-          res.cookie("access_token", req.accessToken, {
+          res.cookie("accessToken", req.accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV !== "local",
             sameSite: "lax",
@@ -51,7 +51,7 @@ export default (router) => {
             .catch((err) => console.error("Error updating last login:", err));
 
           // Redirect to frontend
-          const redirectUrl = `${frontend.url}/${userType}`;
+          const redirectUrl = `${frontend.url}/dashboard`;
           return res.redirect(redirectUrl);
         });
       } catch (error) {

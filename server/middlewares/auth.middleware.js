@@ -17,11 +17,11 @@ const authMiddleware = (req, res, next) => {
       passport.authenticate("jwt", { session: false }, (err, user, info) => {
         try {
           if (!user || err) {
-            // console.error(
-            //   "\nJWT Auth failed:",
-            //   info?.message || "Unknown reason\n",
-            //   err
-            // );
+            console.error(
+              "\nJWT Auth failed:",
+              info?.message || "Unknown reason\n",
+              err,
+            );
 
             throw new AuthException("unauthorized", "auth");
           } else {
