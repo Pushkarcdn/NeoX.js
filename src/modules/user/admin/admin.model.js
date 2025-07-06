@@ -1,5 +1,7 @@
 import CommonEntity from "../../../../configs/common.entities.js";
 
+export const oAuthProviders = [""];
+
 export default (sequelize, DataTypes) => {
   const Admin = sequelize.define("admin", {
     ...CommonEntity,

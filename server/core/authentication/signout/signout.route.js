@@ -57,5 +57,5 @@ export default (router) => {
    *       409:
    *         description: User already exists
    */
-  router.route("/signout").get(SignoutController.signOutUser);
+  router.route("/auth/signout").get(SignoutController.signOutUser);
 };

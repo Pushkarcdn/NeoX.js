@@ -1,5 +1,7 @@
 import CommonEntity from "../../../../configs/common.entities.js";
 
+export const oAuthProviders = ["google"];
+
 export default (sequelize, DataTypes) => {
   const Buyer = sequelize.define("buyer", {
     ...CommonEntity,

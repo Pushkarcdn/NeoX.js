@@ -4,19 +4,19 @@ import path from "path";
 const commonProtectedRoutes = [
   {
     methods: ["GET"],
-    route: "/api/me",
+    route: "/api/auth/me",
   },
   {
     methods: ["POST"],
-    route: "/api/refresh",
+    route: "/api/auth/refresh",
   },
   {
     methods: ["PUT"],
-    route: "/api/update-my-profile",
+    route: "/api/auth/update-my-profile",
   },
   {
     methods: ["PUT"],
-    route: "/api/change-my-password",
+    route: "/api/auth/change-my-password",
   },
 ];
 

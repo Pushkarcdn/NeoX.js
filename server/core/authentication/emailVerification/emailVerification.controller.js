@@ -32,7 +32,7 @@ const initiateEmailVerification = async (user, ip) => {
       templateFile: "emailVerificationMail.ejs",
       variables: {
         name: user.firstName,
-        link: `${backend.url}/api/verify-email/${verificationToken}`,
+        link: `${backend.url}/api/auth/verify-email/${verificationToken}`,
       },
       priority: "normal",
     };

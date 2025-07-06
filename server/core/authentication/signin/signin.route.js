@@ -38,7 +38,7 @@ export default (router) => {
    *       404:
    *         description: User not found
    */
-  router.route("/signin/:userType").post(SigninController.signInUser);
+  router.route("/auth/signin/:userType").post(SigninController.signInUser);
 
   /**
    * @swagger
@@ -53,5 +53,5 @@ export default (router) => {
    *       401:
    *         description: Invalid refresh token
    */
-  router.route("/refresh").post(RefreshController.refreshUserToken);
+  router.route("/auth/refresh").post(RefreshController.refreshUserToken);
 };

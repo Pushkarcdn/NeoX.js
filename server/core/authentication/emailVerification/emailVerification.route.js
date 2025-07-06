@@ -5,8 +5,8 @@ import {
 
 export default (router) => {
   router
-    .route("/resend-verification-email/:userType/:email")
+    .route("/auth/resend-verification-email/:userType/:email")
     .get(resendVerificationEmail);
 
-  router.route("/verify-email/:token").get(verifyEmail);
+  router.route("/auth/verify-email/:token").get(verifyEmail);
 };

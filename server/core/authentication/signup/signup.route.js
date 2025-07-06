@@ -57,5 +57,5 @@ export default (router) => {
    *       409:
    *         description: User already exists
    */
-  router.route("/signup/:userType").post(SignupController.signupUser);
+  router.route("/auth/signup/:userType").post(SignupController.signupUser);
 };

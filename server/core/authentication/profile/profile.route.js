@@ -14,7 +14,9 @@ export default (router) => {
    *       401:
    *         description: Unauthorized
    */
-  router.route("/me").get(ProfileController.currentUser);
+  router.route("/auth/me").get(ProfileController.currentUser);
 
-  router.route("/update-my-profile").put(ProfileController.updateMyProfile);
+  router
+    .route("/auth/update-my-profile")
+    .put(ProfileController.updateMyProfile);
 };

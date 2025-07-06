@@ -21,31 +21,31 @@ export default [
   },
   {
     methods: ["GET"],
-    route: "/api/reset-superadmin",
+    route: "/api/auth/reset-superadmin",
   },
   {
     methods: ["POST"],
-    route: "/api/signup/:userType",
+    route: "/api/auth/signup/:userType",
   },
   {
     methods: ["GET"],
-    route: "/api/verify-email/:token",
+    route: "/api/auth/verify-email/:token",
   },
   {
     methods: ["GET"],
-    route: "/api/resend-verification-email/:userType/:email",
+    route: "/api/auth/resend-verification-email/:userType/:email",
   },
   {
     methods: ["POST"],
-    route: "/api/signin/:userType",
+    route: "/api/auth/signin/:userType",
   },
   {
     methods: ["GET"],
-    route: "/api/signout",
+    route: "/api/auth/signout",
   },
   {
     methods: ["GET"],
-    route: "/api/auth/google/:userType",
+    route: "/api/auth/signin/google/:userType",
   },
   {
     methods: ["GET"],
