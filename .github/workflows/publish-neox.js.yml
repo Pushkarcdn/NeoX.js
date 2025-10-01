@@ -28,6 +28,10 @@ jobs:
         run: |
           mkdir -p .npm/neox.js/template
           rsync -a --exclude='.github' --exclude='.npm' --exclude='.git' . .npm/neox.js/template/
+          # Rename .gitignore to gitignore (npm doesn't publish dotfiles by default)
+          if [ -f .npm/neox.js/template/.gitignore ]; then
+            mv .npm/neox.js/template/.gitignore .npm/neox.js/template/gitignore
+          fi
 
       - name: Get package version
         id: package-version
