@@ -1,6 +1,6 @@
 {
   "name": "neox.js",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "CLI to create a new NeoX.js backend application",
   "main": "index.js",
   "type": "module",
