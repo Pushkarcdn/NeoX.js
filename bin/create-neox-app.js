@@ -11,11 +11,11 @@ const currentNodeVersion = process.versions.node;
 const semver = currentNodeVersion.split(".");
 const major = semver[0];
 
-if (major < 14) {
+if (major < 20) {
   console.error(
     chalk.red(
       `You are running Node ${currentNodeVersion}.\n` +
-        "NeoX.js requires Node 14 or higher.\n" +
+        "NeoX.js requires Node 20 or higher.\n" +
         "Please update your Node version."
     )
   );

@@ -1,6 +1,6 @@
 {
-  "name": "create-neox-app",
-  "version": "0.0.9",
+  "name": "create-neox-app-wrapper",
+  "version": "0.0.10",
   "description": "Create a new NeoX.js backend application (wrapper for neox.js)",
   "main": "index.js",
   "bin": {
