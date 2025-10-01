@@ -1,11 +1,11 @@
 {
   "name": "neox.js",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "CLI to create a new NeoX.js backend application",
-  "main": "bin/create-neox-app.js",
+  "main": "bin/neox.js",
   "bin": {
-    "neox": "./bin/create-neox-app.js",
-    "create-neox-app": "./bin/create-neox-app.js"
+    "neox": "./bin/neox.js",
+    "create-neox-app": "./bin/neox.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
