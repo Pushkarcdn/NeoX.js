@@ -5,6 +5,8 @@ import path from "path";
 import { execSync } from "child_process";
 import chalk from "chalk";
 import inquirer from "inquirer";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 // Check if Node version is sufficient
 const currentNodeVersion = process.versions.node;
@@ -106,7 +108,7 @@ async function createApp() {
     fs.mkdirSync(projectPath, { recursive: true });
 
     // Get template files path
-    const templatePath = path.join(__dirname, "./template");
+    const templatePath = path.join(dirname(fileURLToPath(import.meta.url)), "./template");
 
     // Copy all template files
     await fs.copy(templatePath, projectPath);
