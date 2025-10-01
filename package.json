@@ -1,6 +1,6 @@
 {
   "name": "neox.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "CLI to create a new NeoX.js backend application",
   "main": "bin/create-neox-app.js",
   "bin": {
