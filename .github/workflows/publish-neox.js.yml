@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+env:
+  FOLDER_NAME: neox.js
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -26,21 +30,22 @@ jobs:
 
       - name: Prepare template directory
         run: |
-          mkdir -p .npm/neox.js/template
-          rsync -a --exclude='.github' --exclude='.npm' --exclude='.git' . .npm/neox.js/template/
+          cp -r .npm/common/* .npm/${{ env.FOLDER_NAME }}/
+          mkdir -p .npm/${{ env.FOLDER_NAME }}/template
+          rsync -a --exclude='.github' --exclude='.npm' --exclude='.git' . .npm/${{ env.FOLDER_NAME }}/template/
           # Rename .gitignore to gitignore (npm doesn't publish dotfiles by default)
-          if [ -f .npm/neox.js/template/.gitignore ]; then
-            mv .npm/neox.js/template/.gitignore .npm/neox.js/template/gitignore
+          if [ -f .npm/${{ env.FOLDER_NAME }}/template/.gitignore ]; then
+            mv .npm/${{ env.FOLDER_NAME }}/template/.gitignore .npm/${{ env.FOLDER_NAME }}/template/gitignore
           fi
 
       - name: Get package version
         id: package-version
-        run: echo "version=$(node -p "require('./.npm/neox.js/package.json').version")" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p "require('./.npm/${{ env.FOLDER_NAME }}/package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Check if version exists on npm
         id: check-version
         run: |
-          if npm view neox.js@${{ steps.package-version.outputs.version }} version 2>/dev/null; then
+          if npm view ${{ env.FOLDER_NAME }}@${{ steps.package-version.outputs.version }} version 2>/dev/null; then
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "Version ${{ steps.package-version.outputs.version }} already exists on npm"
           else
@@ -51,9 +56,9 @@ jobs:
       - name: Publish to NPM
         if: steps.check-version.outputs.exists == 'false'
         run: npm publish
-        working-directory: .npm/neox.js
+        working-directory: .npm/${{ env.FOLDER_NAME }}
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ env.NPM_TOKEN }}
 
       - name: Create Git Tag
         if: steps.check-version.outputs.exists == 'false'
@@ -63,7 +68,7 @@ jobs:
           git tag -a "v${{ steps.package-version.outputs.version }}" -m "Release v${{ steps.package-version.outputs.version }}"
           git push origin "v${{ steps.package-version.outputs.version }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
       - name: Skip Publishing
         if: steps.check-version.outputs.exists == 'true'

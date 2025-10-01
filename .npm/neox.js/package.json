@@ -1,6 +1,6 @@
 {
   "name": "neox.js",
-  "version": "0.0.26",
+  "version": "0.0.28",
   "description": "CLI to create a new NeoX.js backend application",
   "main": "index.js",
   "type": "module",
@@ -18,7 +18,7 @@
     "backend",
     "cli"
   ],
-  "author": "Pushkar Kumar Sah <pushkarcdnsah@gmail.com>",
+  "author": "Pushkar Kumar Sah <pushkarcdn@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "fs-extra": "^11.0.0",
