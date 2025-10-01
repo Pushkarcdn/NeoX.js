@@ -1,15 +1,18 @@
-name: Publish create-neox-app Wrapper
+name: Publish to NPM
 
 on:
   push:
     branches:
       - main
     paths:
-      - "create-neox-app-wrapper/**"
-      - ".github/workflows/publish-wrapper.yml"
+      - "neox.js/**"
+    paths-ignore:
+      - "neox.js/README.md"
+      - "neox.js/LICENSE"
+      - "neox.js/.gitignore"
 
 jobs:
-  publish-wrapper:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -21,17 +24,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        working-directory: ./neox.js
+        run: npm install
 
       - name: Get package version
         id: package-version
-        run: echo "version=$(node -p "require('./create-neox-app-wrapper/package.json').version")" >> $GITHUB_OUTPUT
+        working-directory: ./neox.js
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Check if version exists on npm
         id: check-version
         run: |
-          if npm view create-neox-app@${{ steps.package-version.outputs.version }} version 2>/dev/null; then
+          if npm view neox.js@${{ steps.package-version.outputs.version }} version 2>/dev/null; then
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "Version ${{ steps.package-version.outputs.version }} already exists on npm"
           else
@@ -39,13 +47,22 @@ jobs:
             echo "Version ${{ steps.package-version.outputs.version }} is new"
           fi
 
-      - name: Publish wrapper to NPM
+      - name: Publish to NPM
         if: steps.check-version.outputs.exists == 'false'
-        run: |
-          cd create-neox-app-wrapper
-          npm publish
+        working-directory: ./neox.js
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Git Tag
+        if: steps.check-version.outputs.exists == 'false'
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a "v${{ steps.package-version.outputs.version }}" -m "Release v${{ steps.package-version.outputs.version }}"
+          git push origin "v${{ steps.package-version.outputs.version }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Skip Publishing
         if: steps.check-version.outputs.exists == 'true'

@@ -1,5 +1,5 @@
 import { cloudinary } from "../../configs/env.config.js";
-import { v2 as cloudinaryConfig } from "cloudinary";
+import { v2 as cloudinaryConfig } from "@/server/lib/cloudinary.js";
 import streamifier from "streamifier";
 
 cloudinaryConfig.config({

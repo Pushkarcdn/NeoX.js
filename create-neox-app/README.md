@@ -2,12 +2,12 @@
 
 Create a new NeoX.js backend application in seconds.
 
-This package is a convenience wrapper for [`neox.js`](https://www.npmjs.com/package/neox.js).
+This package is a convenience installer for [`neox.js`](https://www.npmjs.com/package/neox.js).
 
 ## Usage
 
 ```bash
-npx create-neox-app my-app-name
+npx create-neox-app my-app
 ```
 
 Or interactive mode:

@@ -1,7 +1,7 @@
 import pg from "pg";
 import { sync } from "glob";
 import cls from "cls-hooked";
-import { Sequelize } from "sequelize";
+import { Sequelize } from "@/server/lib/sequelize.js";
 import isIterable from "../utils/validation/isIterable.js";
 import { postgres, database } from "../../configs/env.config.js";
 

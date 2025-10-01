@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * This is a create-neox-app wrapper
+ * create-neox-app package
  *
- * This is a lightweight wrapper that delegates to the main neox.js package.
+ * This is a lightweight creator package that delegates to the main neox.js package.
  * It allows users to run both:
  * - npx create-neox-app
  * - npx neox.js

@@ -1,11 +1,11 @@
 {
   "name": "neox.js",
-  "version": "0.0.7",
+  "version": "0.0.12",
   "description": "CLI to create a new NeoX.js backend application",
   "main": "bin/create-neox-app.js",
   "bin": {
-    "create-neox-app": "./bin/create-neox-app.js",
-    "neox": "./bin/create-neox-app.js"
+    "neox": "./bin/create-neox-app.js",
+    "create-neox-app": "./bin/create-neox-app.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,6 +33,6 @@
     "url": "https://github.com/pushkarcdn/neox.js"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   }
 }

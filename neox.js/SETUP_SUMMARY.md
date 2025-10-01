@@ -19,9 +19,9 @@ We've created a **two-package system**:
 - Published as `neox.js` on npm
 - Users can run: `npx neox.js`
 
-### 2. Wrapper Package: `create-neox-app`
+### 2. Installer Package: `create-neox-app`
 
-- Lightweight wrapper (just 10 lines of code!)
+- Lightweight installer (just 10 lines of code!)
 - Depends on and delegates to `neox.js`
 - Published as `create-neox-app` on npm
 - Users can run: `npx create-neox-app`
@@ -31,23 +31,6 @@ This is the **same pattern** used by popular tools like:
 - `vite` and `create-vite`
 - `react` and `create-react-app`
 
-## 📁 New Files Created
-
-```
-neox.js/
-├── create-neox-app-wrapper/           # NEW! Wrapper package
-│   ├── package.json                   # Package config for create-neox-app
-│   ├── index.js                       # 10-line wrapper script
-│   ├── README.md                      # Documentation
-│   ├── LICENSE                        # MIT License
-│   └── .npmignore                     # NPM ignore file
-├── .github/workflows/
-│   └── publish-wrapper.yml            # NEW! Auto-publish workflow
-├── scripts/
-│   └── publish-both.sh                # NEW! Manual publish script
-├── PUBLISHING.md                      # NEW! Publishing guide
-└── SETUP_SUMMARY.md                   # This file!
-```
 
 ## 📝 Files Modified
 
@@ -64,7 +47,7 @@ Just push to main - GitHub Actions will handle everything:
 
 ```bash
 git add .
-git commit -m "feat: Add create-neox-app wrapper package"
+git commit -m "feat: Add create-neox-app installer package"
 git push origin main
 ```
 
@@ -109,12 +92,12 @@ npx create-neox-app
 When releasing new versions, **ALWAYS** update both:
 
 1. `/package.json` → version
-2. `/create-neox-app-wrapper/package.json` → version AND dependency
+2. `/create-neox-app/package.json` → version AND dependency
 
 Example for version 0.0.7:
 
 ```json
-// /create-neox-app-wrapper/package.json
+// /create-neox-app/package.json
 {
   "version": "0.0.7",
   "dependencies": {

@@ -1,16 +1,15 @@
-name: Publish to NPM
+name: Publish create-neox-app
 
 on:
   push:
     branches:
       - main
-    paths-ignore:
-      - "README.md"
-      - "LICENSE"
-      - ".gitignore"
+    paths:
+      - "create-neox-app/**"
+      - ".github/workflows/publish-create-neox-app.yml"
 
 jobs:
-  publish:
+  publish-create-neox-app:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -22,20 +21,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           registry-url: "https://registry.npmjs.org"
-
-      - name: Install dependencies
-        run: npm install
 
       - name: Get package version
         id: package-version
-        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p "require('./create-neox-app/package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Check if version exists on npm
         id: check-version
         run: |
-          if npm view neox.js@${{ steps.package-version.outputs.version }} version 2>/dev/null; then
+          if npm view create-neox-app@${{ steps.package-version.outputs.version }} version 2>/dev/null; then
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "Version ${{ steps.package-version.outputs.version }} already exists on npm"
           else
@@ -43,21 +39,13 @@ jobs:
             echo "Version ${{ steps.package-version.outputs.version }} is new"
           fi
 
-      - name: Publish to NPM
-        if: steps.check-version.outputs.exists == 'false'
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Create Git Tag
+      - name: Publish create-neox-app to NPM
         if: steps.check-version.outputs.exists == 'false'
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git tag -a "v${{ steps.package-version.outputs.version }}" -m "Release v${{ steps.package-version.outputs.version }}"
-          git push origin "v${{ steps.package-version.outputs.version }}"
+          cd create-neox-app
+          npm publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Skip Publishing
         if: steps.check-version.outputs.exists == 'true'
