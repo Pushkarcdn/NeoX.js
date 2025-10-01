@@ -47,6 +47,7 @@ jobs:
       - name: Publish to NPM
         if: steps.check-version.outputs.exists == 'false'
         run: npm publish
+        working-directory: .npm/neox.js
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
