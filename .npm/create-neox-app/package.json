@@ -1,33 +1,28 @@
 {
-  "name": "neox.js",
-  "version": "0.0.21",
-  "description": "CLI to create a new NeoX.js backend application",
+  "name": "create-neox-app-beta",
+  "version": "0.0.22",
+  "description": "Create a new NeoX.js backend application.",
   "main": "index.js",
   "bin": {
-    "neox": "./index.js",
-    "create-neox-app": "./index.js"
+    "create-neox-app": "index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "neox",
+    "create-neox-app",
     "framework",
     "nodejs",
     "backend",
-    "cli"
+    "cli",
+    "Pushkar Kumar Sah"
   ],
-  "author": "Pushkar Kumar Sah <pushkarcdnsah@gmail.com>",
+  "author": "Pushkar Kumar Sah <pushkarcdn@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "fs-extra": "^11.0.0",
-    "chalk": "^4.1.2",
-    "inquirer": "^8.2.0"
+    "neox.js": "0.0.21"
   },
-  "files": [
-    "index.js",
-    "template/"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/pushkarcdn/neox.js"

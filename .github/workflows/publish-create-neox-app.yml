@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "create-neox-app/**"
+      - ".npm/create-neox-app/**"
       - ".github/workflows/publish-create-neox-app.yml"
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
 
       - name: Get package version
         id: package-version
-        run: echo "version=$(node -p "require('./create-neox-app/package.json').version")" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p "require('./.npm/create-neox-app/package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Check if version exists on npm
         id: check-version
@@ -51,7 +51,7 @@ jobs:
       - name: Publish create-neox-app to NPM
         if: steps.check-version.outputs.exists == 'false'
         run: |
-          cd create-neox-app
+          cd .npm/create-neox-app
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

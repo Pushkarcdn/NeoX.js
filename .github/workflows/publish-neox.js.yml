@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "neox.js/**"
 
 jobs:
   publish:
@@ -24,12 +22,15 @@ jobs:
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
-        working-directory: ./neox.js
         run: npm install
+
+      - name: Prepare template directory
+        run: |
+          mkdir -p .npm/neox.js/template
+          rsync -a --exclude='.github' --exclude='.npm' --exclude='.git' . .npm/neox.js/template/
 
       - name: Get package version
         id: package-version
-        working-directory: ./neox.js
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Check if version exists on npm
@@ -45,7 +46,6 @@ jobs:
 
       - name: Publish to NPM
         if: steps.check-version.outputs.exists == 'false'
-        working-directory: ./neox.js
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
