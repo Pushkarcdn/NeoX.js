@@ -1,5 +1,5 @@
 {
-  "name": "create-neox-app",
+  "name": "create-neox-app-beta",
   "version": "0.0.12",
   "description": "Create a new NeoX.js backend application.",
   "main": "index.js",
