@@ -139,14 +139,6 @@ async function createApp() {
 
     await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
 
-    // Update README.md with app name
-    const readmePath = path.join(projectPath, "README.md");
-    if (await fs.pathExists(readmePath)) {
-      let readmeContent = await fs.readFile(readmePath, "utf8");
-      readmeContent = readmeContent.replace(/\{\{app-name\}\}/g, appName);
-      await fs.writeFile(readmePath, readmeContent, "utf8");
-    }
-
     // Rename gitignore to .gitignore (npm doesn't publish dotfiles by default)
     const gitignorePath = path.join(projectPath, "gitignore");
     const dotGitignorePath = path.join(projectPath, ".gitignore");
@@ -185,7 +177,7 @@ async function createApp() {
     } catch (gitError) {
       console.log(
         chalk.yellow(
-          "⚠️  Git initialization failed. You can initialize git manually later with 'git init'."
+          "⚠️  Git not initialized. You can initialize git manually later with 'git init'."
         )
       );
     }

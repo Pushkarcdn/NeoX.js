@@ -31,6 +31,7 @@ jobs:
       - name: Prepare template directory
         run: |
           cp -r .npm/common/* .npm/${{ env.FOLDER_NAME }}/
+          cp -r README.md .npm/${{ env.FOLDER_NAME }}/
           mkdir -p .npm/${{ env.FOLDER_NAME }}/template
           rsync -a --exclude='.github' --exclude='.npm' --exclude='.git' . .npm/${{ env.FOLDER_NAME }}/template/
           # Rename .gitignore to gitignore (npm doesn't publish dotfiles by default)
