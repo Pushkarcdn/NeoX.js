@@ -1,6 +1,6 @@
 {
   "name": "create-neox-app-beta",
-  "version": "0.0.18",
+  "version": "0.0.20",
   "description": "Create a new NeoX.js backend application.",
   "main": "index.js",
   "bin": {
@@ -21,7 +21,7 @@
   "author": "Pushkar Kumar Sah <pushkarcdn@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "neox.js": "*"
+    "neox.js": "0.0.20"
   },
   "repository": {
     "type": "git",
