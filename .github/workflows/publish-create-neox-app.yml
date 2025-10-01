@@ -65,8 +65,8 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git tag -a "v${{ steps.package-version.outputs.version }}" -m "Release v${{ steps.package-version.outputs.version }}"
-          git push origin "v${{ steps.package-version.outputs.version }}"
+          git tag -a "${{ env.FOLDER_NAME }}-v${{ steps.package-version.outputs.version }}" -m "Release ${{ env.FOLDER_NAME }}-v${{ steps.package-version.outputs.version }}"
+          git push origin "${{ env.FOLDER_NAME }}-v${{ steps.package-version.outputs.version }}"
         env:
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
