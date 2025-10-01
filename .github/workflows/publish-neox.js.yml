@@ -6,9 +6,6 @@ on:
       - main
     paths:
       - "neox.js/**"
-      - "!neox.js/README.md"
-      - "!neox.js/LICENSE"
-      - "!neox.js/.gitignore"
 
 jobs:
   publish:

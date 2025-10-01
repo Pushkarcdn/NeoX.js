@@ -39,6 +39,15 @@ jobs:
             echo "Version ${{ steps.package-version.outputs.version }} is new"
           fi
 
+      - name: Wait for neox.js CDN propagation
+        if: steps.check-version.outputs.exists == 'false'
+        run: |
+          echo "⏳ Waiting 5 minutes for neox.js to propagate across npm CDN..."
+          echo "This ensures neox.js@${{ steps.package-version.outputs.version }} is available globally"
+          sleep 300
+          echo "✅ Wait complete. Verifying neox.js availability..."
+          npm view neox.js@${{ steps.package-version.outputs.version }} version || echo "⚠️ Warning: neox.js@${{ steps.package-version.outputs.version }} not found"
+
       - name: Publish create-neox-app to NPM
         if: steps.check-version.outputs.exists == 'false'
         run: |
