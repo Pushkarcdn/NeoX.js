@@ -1,11 +1,11 @@
 {
   "name": "neox.js",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "CLI to create a new NeoX.js backend application",
-  "main": "bin/neox.js",
+  "main": "index.js",
   "bin": {
-    "neox": "./bin/neox.js",
-    "create-neox-app": "./bin/neox.js"
+    "neox": "./index.js",
+    "create-neox-app": "./index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,7 +25,7 @@
     "inquirer": "^8.2.0"
   },
   "files": [
-    "bin/",
+    "index.js",
     "template/"
   ],
   "repository": {

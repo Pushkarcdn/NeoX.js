@@ -14,13 +14,6 @@ public/uploads/
 # Optional eslint cache
 .eslintcache
 
-# dotenv environment variables file
-.env
-.env.test
-.env.local
-.env.development
-.env.production
-
 # user uploaded files
 public/uploads
 
@@ -66,5 +59,7 @@ pids
 # vercel
 .vercel
 
-# Ensure .env.example is included
+# env files
+.env
+.env.*
 !.env.example

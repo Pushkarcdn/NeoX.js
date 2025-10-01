@@ -1,4 +1,4 @@
-import bcrypt from "@/server/lib/bcrypt";
+import bcrypt from "bcrypt";
 
 const hashPassword = async (password) => {
   try {

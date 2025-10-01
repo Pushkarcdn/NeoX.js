@@ -25,7 +25,7 @@ if (major < 22) {
 console.log(
   chalk.blue(`
 ╔═════════════════════════════════════════════╗
-║                    NeoX.js                  ║
+║                   NeoX.js                   ║
 ║    The Smartest Node Backend Framework!     ║
 ╚═════════════════════════════════════════════╝
 `)
@@ -98,7 +98,7 @@ async function createApp() {
     fs.mkdirSync(projectPath, { recursive: true });
 
     // Get template files path
-    const templatePath = path.join(__dirname, "../template");
+    const templatePath = path.join(__dirname, "./template");
 
     // Copy all template files
     await fs.copy(templatePath, projectPath);

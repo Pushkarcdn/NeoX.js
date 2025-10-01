@@ -1,4 +1,4 @@
-import multer from "@/server/lib/multer.js";
+import multer from "multer";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
