@@ -1,0 +1,32 @@
+{
+  "name": "neox.js",
+  "version": "0.0.1",
+  "description": "A Node.js backend framework with built-in routing",
+  "main": "bin/create-neox-app.js",
+  "bin": {
+    "create-neox-app": "./bin/create-neox-app.js"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "framework",
+    "nodejs",
+    "backend"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/neox.js"
+  },
+  "files": [
+    "bin/",
+    "template_files/"
+  ],
+  "dependencies": {
+    "fs-extra": "^11.0.0",
+    "chalk": "^4.1.2",
+    "inquirer": "^8.2.0"
+  }
+}
