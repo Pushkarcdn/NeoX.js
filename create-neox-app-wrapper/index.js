@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * create-neox-app wrapper
+ * This is a create-neox-app wrapper
  *
  * This is a lightweight wrapper that delegates to the main neox.js package.
  * It allows users to run both:

@@ -7,7 +7,7 @@ This package is a convenience wrapper for [`neox.js`](https://www.npmjs.com/pack
 ## Usage
 
 ```bash
-npx create-neox-app my-app
+npx create-neox-app my-app-name
 ```
 
 Or interactive mode:
