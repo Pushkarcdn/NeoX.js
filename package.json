@@ -1,6 +1,6 @@
 {
   "name": "neox.js",
-  "version": "1.0.1",
+  "version": "0.0.1",
   "description": "CLI to create a new NeoX.js backend application",
   "main": "bin/create-neox-app.js",
   "bin": {
@@ -30,9 +30,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Pushkarcdn/neox.js"
+    "url": "https://github.com/pushkarcdn/neox.js"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   }
 }
