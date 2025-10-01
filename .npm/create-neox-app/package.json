@@ -1,14 +1,11 @@
 {
   "name": "create-neox-app-beta",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "CLI to create a new NeoX.js backend application",
   "main": "index.js",
   "type": "module",
   "bin": {
     "create-neox-app": "./index.js"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "create-neox-app",

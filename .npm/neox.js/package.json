@@ -1,15 +1,11 @@
 {
   "name": "neox.js",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "CLI to create a new NeoX.js backend application",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "neox": "./index.js",
-    "create-neox-app": "./index.js"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "neox": "./index.js"
   },
   "keywords": [
     "neox",
