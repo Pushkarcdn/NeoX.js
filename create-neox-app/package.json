@@ -1,6 +1,6 @@
 {
   "name": "create-neox-app-beta",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Create a new NeoX.js backend application.",
   "main": "index.js",
   "bin": {
