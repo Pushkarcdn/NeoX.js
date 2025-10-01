@@ -22,6 +22,10 @@ if (major < 22) {
   process.exit(1);
 }
 
+// Get the version from package.json
+const packageJson = require("./package.json");
+const neoxVersion = packageJson.version;
+
 console.log(
   chalk.blue(`
 ╔═════════════════════════════════════════════╗
@@ -29,6 +33,10 @@ console.log(
 ║    The Smartest Node Backend Framework!     ║
 ╚═════════════════════════════════════════════╝
 `)
+);
+
+console.log(
+  chalk.cyan(`📦 Installing NeoX.js version: ${chalk.bold(neoxVersion)}\n`)
 );
 
 async function createApp() {
