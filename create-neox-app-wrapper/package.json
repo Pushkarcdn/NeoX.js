@@ -1,0 +1,32 @@
+{
+  "name": "create-neox-app",
+  "version": "0.0.7",
+  "description": "Create a new NeoX.js backend application (wrapper for neox.js)",
+  "main": "index.js",
+  "bin": {
+    "create-neox-app": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "neox",
+    "create-neox-app",
+    "framework",
+    "nodejs",
+    "backend",
+    "cli"
+  ],
+  "author": "Pushkar Kumar Sah <pushkarcdn@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "neox.js": "^0.0.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pushkarcdn/neox.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

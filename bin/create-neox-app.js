@@ -32,8 +32,15 @@ console.log(
 );
 
 async function createApp() {
-  const answers = await inquirer.prompt([
-    {
+  // Get app name from command line argument if provided
+  const args = process.argv.slice(2);
+  const appNameArg = args[0];
+
+  const questions = [];
+
+  // Only ask for app name if not provided as argument
+  if (!appNameArg) {
+    questions.push({
       type: "input",
       name: "appName",
       message: "What is your project name?",
@@ -43,7 +50,20 @@ async function createApp() {
         else
           return "Project name may only include letters, numbers, underscores and hyphens.";
       },
-    },
+    });
+  } else {
+    // Validate the provided app name
+    if (!/^([A-Za-z\-\_\d])+$/.test(appNameArg)) {
+      console.log(
+        chalk.red(
+          "❌ Project name may only include letters, numbers, underscores and hyphens."
+        )
+      );
+      process.exit(1);
+    }
+  }
+
+  questions.push(
     {
       type: "input",
       name: "appDescription",
@@ -55,10 +75,12 @@ async function createApp() {
       name: "appAuthor",
       message: "Author name:",
       default: "Your Name",
-    },
-  ]);
+    }
+  );
 
-  const appName = answers.appName;
+  const answers = await inquirer.prompt(questions);
+
+  const appName = appNameArg || answers.appName;
   const appDescription = answers.appDescription;
   const appAuthor = answers.appAuthor;
   const projectPath = path.resolve(process.cwd(), appName);

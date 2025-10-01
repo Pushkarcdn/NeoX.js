@@ -4,6 +4,7 @@
 
 ![NeoX.js Logo](https://img.shields.io/badge/NeoX.js-v1.0.1-blue?style=for-the-badge&logo=node.js&logoColor=white)
 [![NPM Version](https://img.shields.io/npm/v/neox.js?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/neox.js)
+[![create-neox-app](https://img.shields.io/npm/v/create-neox-app?style=for-the-badge&logo=npm&label=create-neox-app)](https://www.npmjs.com/package/create-neox-app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js->=14.0.0-green.svg?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 
@@ -20,13 +21,14 @@ Create production-ready Node.js backend applications in seconds.
 Get started with NeoX.js in just one command:
 
 ```bash
-npx neox.js my-app
-```
-
-Or use the alternative command:
-
-```bash
+# Using create-neox-app (recommended)
 npx create-neox-app my-app
+
+# Or using neox.js directly
+npx neox.js my-app
+
+# Interactive mode (prompts for project name)
+npx create-neox-app
 ```
 
 That's it! Your backend is ready to go! 🎉
@@ -112,11 +114,17 @@ your-app/
 ### Create Your App
 
 ```bash
-# Using npx (recommended)
+# Using npx (recommended - no installation required)
+npx create-neox-app my-backend-app
+
+# Or use neox.js directly
 npx neox.js my-backend-app
 
+# Interactive mode
+npx create-neox-app
+
 # You'll be prompted for:
-# - Project name
+# - Project name (if not provided as argument)
 # - Description
 # - Author name
 ```
@@ -239,15 +247,15 @@ POST /api/forgot-password     # Password reset
 
 ## 🌟 Why NeoX.js?
 
-| Feature | NeoX.js | Express Generator | Other Frameworks |
-|---------|---------|-------------------|------------------|
-| Authentication | ✅ Built-in | ❌ Manual | ⚠️ Varies |
-| Database ORM | ✅ Sequelize | ❌ None | ⚠️ Varies |
-| API Docs | ✅ Swagger | ❌ None | ⚠️ Manual |
-| Security | ✅ Complete | ⚠️ Basic | ⚠️ Varies |
-| File Upload | ✅ Configured | ❌ Manual | ⚠️ Manual |
-| OAuth | ✅ Ready | ❌ Manual | ⚠️ Manual |
-| Git Init | ✅ Auto | ❌ Manual | ❌ Manual |
+| Feature        | NeoX.js       | Express Generator | Other Frameworks |
+| -------------- | ------------- | ----------------- | ---------------- |
+| Authentication | ✅ Built-in   | ❌ Manual         | ⚠️ Varies        |
+| Database ORM   | ✅ Sequelize  | ❌ None           | ⚠️ Varies        |
+| API Docs       | ✅ Swagger    | ❌ None           | ⚠️ Manual        |
+| Security       | ✅ Complete   | ⚠️ Basic          | ⚠️ Varies        |
+| File Upload    | ✅ Configured | ❌ Manual         | ⚠️ Manual        |
+| OAuth          | ✅ Ready      | ❌ Manual         | ⚠️ Manual        |
+| Git Init       | ✅ Auto       | ❌ Manual         | ❌ Manual        |
 
 ---
 
