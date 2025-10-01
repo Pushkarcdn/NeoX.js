@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const fs = require("fs-extra");
-const path = require("path");
-const { execSync } = require("child_process");
-const chalk = require("chalk");
-const inquirer = require("inquirer");
+import fs from "fs-extra";
+import path from "path";
+import { execSync } from "child_process";
+import chalk from "chalk";
+import inquirer from "inquirer";
 
 // Check if Node version is sufficient
 const currentNodeVersion = process.versions.node;
@@ -23,7 +23,7 @@ if (major < 22) {
 }
 
 // Get the version from package.json
-const packageJson = require("./package.json");
+import packageJson from "./package.json" with { type: "json" };
 const neoxVersion = packageJson.version;
 
 console.log(
@@ -198,10 +198,7 @@ async function createApp() {
     console.log(chalk.cyan("   3. Set up your PostgreSQL database"));
     console.log(chalk.cyan("   4. npm run dev:local"));
     console.log(
-      chalk.gray("\n💡 The server will run on http://localhost:4000")
-    );
-    console.log(
-      chalk.gray("📚 Documentation: https://github.com/Pushkarcdn/neox.js")
+      chalk.gray("\n📚 Documentation: https://github.com/pushkarcdn/neox.js")
     );
   } catch (error) {
     console.log(chalk.red("❌ Error creating project:"), error.message);

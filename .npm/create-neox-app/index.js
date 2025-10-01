@@ -10,4 +10,4 @@
  */
 
 // Simply require and execute the main neox.js CLI
-require("neox.js");
+import "neox.js";
