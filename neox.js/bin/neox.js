@@ -98,7 +98,7 @@ async function createApp() {
     fs.mkdirSync(projectPath, { recursive: true });
 
     // Get template files path
-    const templatePath = path.join(__dirname, "../template_files");
+    const templatePath = path.join(__dirname, "../template");
 
     // Copy all template files
     await fs.copy(templatePath, projectPath);

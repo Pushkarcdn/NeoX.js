@@ -1,6 +1,6 @@
 {
   "name": "neox.js",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "CLI to create a new NeoX.js backend application",
   "main": "bin/create-neox-app.js",
   "bin": {
@@ -26,7 +26,7 @@
   },
   "files": [
     "bin/",
-    "template_files/"
+    "template/"
   ],
   "repository": {
     "type": "git",

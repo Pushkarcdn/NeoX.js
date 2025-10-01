@@ -1,10 +1,10 @@
 {
   "name": "create-neox-app-beta",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Create a new NeoX.js backend application.",
   "main": "index.js",
   "bin": {
-    "create-neox-app": "./index.js"
+    "create-neox-app": "index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
