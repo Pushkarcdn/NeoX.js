@@ -5,7 +5,7 @@
     "node": ">=22.14.0",
     "npm": ">=10.9.2"
   },
-  "description": "{{app-description}}",
+  "description": "A NeoX.js backend application",
   "type": "module",
   "main": "./index.js",
   "exports": "./index.js",
@@ -26,7 +26,7 @@
     "lint": "eslint --fix . && echo 'Lint complete.'"
   },
   "keywords": [],
-  "author": "{{app-author}}",
+  "author": "Your Name",
   "license": "ISC",
   "repository": {
     "type": "git",

@@ -1,32 +1,38 @@
 {
   "name": "neox.js",
-  "version": "0.0.1",
-  "description": "A Node.js backend framework with built-in routing",
+  "version": "1.0.1",
+  "description": "CLI to create a new NeoX.js backend application",
   "main": "bin/create-neox-app.js",
   "bin": {
-    "create-neox-app": "./bin/create-neox-app.js"
+    "create-neox-app": "./bin/create-neox-app.js",
+    "neox": "./bin/create-neox-app.js"
   },
   "scripts": {
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
+    "neox",
     "framework",
     "nodejs",
-    "backend"
+    "backend",
+    "cli"
   ],
-  "author": "Your Name",
+  "author": "Pushkar Kumar Sah <pushkarcdnsah@gmail.com>",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/neox.js"
+  "dependencies": {
+    "fs-extra": "^11.0.0",
+    "chalk": "^4.1.2",
+    "inquirer": "^8.2.0"
   },
   "files": [
     "bin/",
     "template_files/"
   ],
-  "dependencies": {
-    "fs-extra": "^11.0.0",
-    "chalk": "^4.1.2",
-    "inquirer": "^8.2.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pushkarcdn/neox.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
